@@ -1,0 +1,162 @@
+/* AIGC管理后台 - 全局样式 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+/* Toggle Switch */
+.switch {
+    position: relative; display: inline-block; width: 40px; height: 20px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc; transition: .3s; border-radius: 20px;
+}
+.slider:before {
+    position: absolute; content: ""; height: 14px; width: 14px;
+    left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
+}
+input:checked + .slider { background-color: #52c41a; }
+input:checked + .slider:before { transform: translateX(20px); }
+/* Nav */
+.nav-item { cursor: pointer; transition: all 0.2s; }
+.nav-item.active {
+    color: #2563eb; background-color: #eff6ff; font-weight: 600;
+}
+.nav-item.active i { color: #2563eb; }
+/* Views */
+.view-panel { display: none; }
+.view-panel.active { display: block; }
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* ====== 画布工作区 - 深色主题 ====== */
+#workspace-canvas { background: #1a1a1a; }
+#canvasWorkspace {
+    background-color: #1e1e1e !important;
+    background-image: radial-gradient(#333 1px, transparent 1px) !important;
+    background-size: 24px 24px !important;
+}
+
+/* 左侧面板 - 深色 */
+#canvasLeftPanel {
+    background: #222; color: #ccc;
+    border-right: 1px solid #333;
+}
+#canvasLeftPanel .panel-label {
+    color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    font-weight: 600; margin-bottom: 6px;
+}
+#canvasLeftPanel select,
+#canvasLeftPanel textarea {
+    background: #1a1a1a; border: 1px solid #3a3a3a; color: #ddd;
+    border-radius: 6px; font-size: 12px;
+}
+#canvasLeftPanel select:focus,
+#canvasLeftPanel textarea:focus {
+    border-color: #6366f1; outline: none;
+}
+#canvasLeftPanel .size-btn,
+#canvasLeftPanel .style-btn {
+    background: #2a2a2a; border: 1px solid #3a3a3a; color: #aaa;
+    border-radius: 6px; padding: 6px 10px; font-size: 11px; cursor: pointer;
+}
+#canvasLeftPanel .size-btn.active,
+#canvasLeftPanel .style-btn.active {
+    background: #312e81; border-color: #6366f1; color: #a5b4fc;
+}
+#canvasLeftPanel .gen-btn {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff;
+    border: none; border-radius: 8px; padding: 10px; font-weight: 600;
+    font-size: 13px; cursor: pointer;
+}
+#canvasLeftPanel .gen-btn:hover { opacity: 0.9; }
+#canvasLeftPanel .quick-btn {
+    background: #2a2a2a; border: 1px solid #3a3a3a; color: #888;
+    border-radius: 4px; padding: 4px 8px; font-size: 10px; cursor: pointer;
+}
+#canvasLeftPanel .quick-btn:hover { border-color: #6366f1; color: #a5b4fc; }
+
+/* 顶部工具栏 - 深色 */
+#canvasToolbar {
+    background: #252525; border-bottom: 1px solid #333; color: #ddd;
+}
+#canvasToolbar .toolbar-btn {
+    background: #333; border: none; color: #aaa; border-radius: 6px;
+    padding: 5px 12px; font-size: 11px; cursor: pointer;
+}
+#canvasToolbar .toolbar-btn:hover { background: #444; color: #fff; }
+#canvasToolbar .toolbar-btn.primary { background: #6366f1; color: #fff; }
+#canvasToolbar .toolbar-btn.primary:hover { background: #4f46e5; }
+
+/* 节点卡片 */
+.canvas-node {
+    background: #2a2a2a; border: 1px solid #404040; border-radius: 10px;
+    position: absolute; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    overflow: hidden; cursor: grab; min-width: 240px;
+    transition: box-shadow 0.2s;
+}
+.canvas-node:hover { box-shadow: 0 12px 32px rgba(99,102,241,0.2); }
+.canvas-node .node-header {
+    background: #333; padding: 8px 12px; display: flex; align-items: center;
+    justify-content: space-between; font-size: 11px; color: #aaa;
+}
+.canvas-node .node-image {
+    background: #1a1a1a; display: flex; align-items: center;
+    justify-content: center; min-height: 160px; overflow: hidden;
+}
+.canvas-node .node-image img {
+    width: 100%; height: 100%; object-fit: cover;
+}
+.canvas-node .node-footer {
+    padding: 8px 12px; font-size: 10px; color: #666;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.canvas-node .node-footer .node-actions i {
+    cursor: pointer; margin-left: 8px; color: #555;
+}
+.canvas-node .node-footer .node-actions i:hover { color: #a5b4fc; }
+
+/* 文本节点 */
+.canvas-node.text-node .node-body {
+    padding: 16px; font-size: 13px; color: #ddd; line-height: 1.6;
+}
+.canvas-node.text-node .node-body textarea {
+    width: 100%; background: #1a1a1a; border: 1px solid #3a3a3a; color: #ddd;
+    border-radius: 6px; padding: 10px; font-size: 12px; resize: vertical;
+    min-height: 80px;
+}
+
+/* 底部历史 */
+#historyBar {
+    background: #1e1e1e; border-top: 1px solid #333;
+}
+#historyBar .history-thumb {
+    width: 44px; height: 44px; border-radius: 6px; overflow: hidden;
+    border: 2px solid transparent; cursor: pointer; flex-shrink: 0;
+}
+#historyBar .history-thumb:hover { border-color: #6366f1; }
+
+/* 右键菜单 */
+.context-menu {
+    position: fixed; background: #2a2a2a; border: 1px solid #444;
+    border-radius: 8px; padding: 4px; z-index: 60; min-width: 160px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+.context-menu .menu-item {
+    padding: 8px 14px; font-size: 12px; color: #ccc; border-radius: 6px;
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+}
+.context-menu .menu-item:hover { background: #3a3a3a; color: #fff; }
+
+/* 预览遮罩 */
+.image-preview-overlay {
+    position: fixed; inset: 0; z-index: 70; background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.image-preview-overlay img {
+    max-width: 92vw; max-height: 92vh; border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
