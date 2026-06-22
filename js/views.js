@@ -31,8 +31,14 @@ var ViewRouter = (function() {
         if (view === 'canvas') {
             Utils.byId('view-canvas-projects').classList.add('active');
             CanvasModule.refreshProjectList();
+        } else if (view === 'delivery') {
+            Utils.byId('view-delivery').classList.add('active');
+            DeliveryModule.render();
+        } else if (view === 'upload') {
+            Utils.byId('view-upload').classList.add('active');
         } else {
             Utils.byId('view-filmlibrary').classList.add('active');
+            if (view === 'filmlibrary') FilmLibrary.render();
         }
     }
 
@@ -49,6 +55,5 @@ var ViewRouter = (function() {
     };
 })();
 
-// 暴露到全局
 window.switchView = ViewRouter.switchView;
 window.backToCanvasProjects = ViewRouter.backToCanvasProjects;

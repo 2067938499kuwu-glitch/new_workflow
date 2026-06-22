@@ -23,10 +23,22 @@ var AppData = (function() {
         {id:'#2305',name:'《时光旅人》',type:'奇幻',episodes:'15集',desc:'时间穿越奇幻短剧'}
     ];
 
+    // 交付中心数据
+    var deliveryData = [
+        {name:'挖果树',episodes:'0',category:'—',status:'待审核',statusClass:'tag-orange',deadline:'—',pending:0,rejected:0,approved:0},
+        {name:'董卓',episodes:'0',category:'—',status:'待审核',statusClass:'tag-orange',deadline:'—',pending:0,rejected:0,approved:0},
+        {name:'新引擎',episodes:'0',category:'—',status:'待上传',statusClass:'tag-gray',deadline:'—',pending:0,rejected:0,approved:0},
+        {name:'测试1',episodes:'0',category:'—',status:'已完成',statusClass:'tag-green',deadline:'—',pending:0,rejected:0,approved:0},
+        {name:'ztest',episodes:'0',category:'—',status:'待上传',statusClass:'tag-gray',deadline:'—',pending:0,rejected:0,approved:0},
+        {name:'《政企部门》',episodes:'4',category:'—',status:'已完成',statusClass:'tag-green',deadline:'—',pending:4,rejected:4,approved:0},
+        {name:'《三江学院》',episodes:'4',category:'—',status:'审核驳回',statusClass:'tag-red',deadline:'—',pending:4,rejected:4,approved:0},
+        {name:'测试引擎1',episodes:'7',category:'—',status:'待审核',statusClass:'tag-orange',deadline:'—',pending:2,rejected:0,approved:2}
+    ];
+
     var pageTitles = {
         dashboard:'数据大盘', resource:'资源中心', project:'项目管理', topic:'选题库',
         approval:'项目立项', task:'任务列表', cost:'成本工时管理', delivery:'交付中心',
-        filmlibrary:'成片库', canvas:'画布'
+        filmlibrary:'成片库', canvas:'画布', upload:'上传文件'
     };
 
     var nextIdCounter = 2322;
@@ -34,6 +46,7 @@ var AppData = (function() {
     return {
         filmData: filmData,
         canvasProjects: canvasProjects,
+        deliveryData: deliveryData,
         pageTitles: pageTitles,
         nextIdCounter: nextIdCounter
     };
