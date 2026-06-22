@@ -136,6 +136,63 @@
                 </div>
             </div>
 
+
+
+            <!-- ====== 任务列表视图 ====== -->
+            <div id="view-task" class="view-panel space-y-4">
+                <div class="task-breadcrumb">项目管理 / <span>任务列表</span></div>
+                <div class="task-chip-row">
+                    <button class="task-chip">数据大盘</button>
+                    <button class="task-chip">成本工时管理</button>
+                    <button class="task-chip">选题库</button>
+                    <button class="task-chip active">任务列表</button>
+                    <button class="task-chip">素材库</button>
+                    <button class="task-chip">项目立项</button>
+                    <button class="task-chip">成片库</button>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-[1.15fr_1.15fr_auto] gap-4 items-center">
+                        <div class="flex items-center space-x-2"><span class="text-gray-500 whitespace-nowrap">项目名称</span><input type="text" placeholder="请输入" class="w-full border border-gray-300 rounded px-3 py-1.5 text-xs focus:border-blue-500 outline-none"></div>
+                        <div class="flex items-center space-x-2"><span class="text-gray-500 whitespace-nowrap">题材</span><select class="w-full border border-gray-300 rounded px-3 py-1.5 text-xs focus:border-blue-500 outline-none"><option>全部题材</option><option>动画</option><option>热血</option></select></div>
+                        <div class="flex items-center space-x-2 justify-start md:justify-end">
+                            <button class="bg-blue-600 text-white px-5 py-1.5 rounded text-xs hover:bg-blue-700 font-medium">查询</button>
+                            <button class="border border-gray-300 text-gray-600 px-5 py-1.5 rounded text-xs hover:bg-gray-50 font-medium bg-white">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="px-4 pt-3">
+                        <div class="flex flex-wrap items-center gap-6 border-b border-gray-100" id="taskRoleTabs"></div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse task-table">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 border-b border-gray-200 text-xs font-semibold">
+                                    <th class="py-3 px-4">序号</th>
+                                    <th class="py-3 px-4">项目名称</th>
+                                    <th class="py-3 px-4">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="taskTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="task-table-footer">
+                        <div class="flex items-center gap-3">
+                            <span>共 1 条</span>
+                            <div class="task-page-size">20条/页 <i class="fa-solid fa-chevron-down text-[10px]"></i></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="task-page-btn disabled"><i class="fa-solid fa-angle-left"></i></button>
+                            <button class="task-page-btn active">1</button>
+                            <button class="task-page-btn disabled"><i class="fa-solid fa-angle-right"></i></button>
+                            <span>前往</span>
+                            <input class="task-page-input" value="1">
+                            <span>页</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ====== 交付中心视图 ====== -->
             <div id="view-delivery" class="view-panel space-y-4">
                 <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
@@ -404,19 +461,83 @@
         </div>
     </div>
 
+
+
+    <!-- ============ 任务列表-剪辑弹窗 ============ -->
+    <div id="taskClipModal" class="detail-overlay">
+        <div class="task-clip-modal">
+            <div class="task-clip-header">
+                <div>
+                    <div class="task-clip-title" id="taskClipTitle">剪辑-海贼王</div>
+                    <div class="task-clip-episodes"><span>集数：</span><div id="taskEpisodeTabs" class="flex items-center gap-2"></div></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <select id="taskClipSelect" class="border border-gray-300 rounded px-3 py-1.5 text-xs focus:border-blue-500 outline-none"><option>1-3集</option></select>
+                    <button class="task-secondary-btn">分镜下载</button>
+                    <button class="detail-close" onclick="TaskModule.closeClipModal()">&times;</button>
+                </div>
+            </div>
+            <div class="task-clip-body">
+                <div class="task-section-title has-bar">剪辑素材</div>
+                <div class="task-upload-tip">当前剧集审核未通过，可沿用上一版文件并按照重新上传后手动提交审核。</div>
+                <div class="task-merge-note" id="taskClipMergeNote">当前剧集第1与第2集需要合并在一起</div>
+                <div class="task-section-title has-bar">上传文件</div>
+                <div class="task-clip-main-grid">
+                    <div class="task-upload-dropzone">
+                        <span class="task-upload-warning">四类文件必传</span>
+                        <div class="task-upload-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                        <div class="task-upload-cta">点击或拖拽重新上传剪辑文件</div>
+                        <div class="task-upload-desc">统一入口支持文件夹上传与单文件上传，系统仅根据文件名称自动匹配文件类型。</div>
+                    </div>
+                    <div class="task-file-status-panel">
+                        <div class="task-section-title flex items-center justify-between"><span>本次上传文件状态</span><span class="text-[11px] text-gray-400 font-normal">文件卡片仅支持在线预览</span></div>
+                        <div id="taskFileStatusList" class="grid grid-cols-2 gap-3"></div>
+                    </div>
+                </div>
+                <div class="task-history-panel">
+                    <div class="task-section-title">提交历史记录</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse task-history-table">
+                            <thead>
+                                <tr>
+                                    <th>批次</th>
+                                    <th>提交时间</th>
+                                    <th>成片</th>
+                                    <th>图片</th>
+                                    <th>音频</th>
+                                    <th>字幕</th>
+                                    <th>提交人</th>
+                                    <th>审核信息</th>
+                                </tr>
+                            </thead>
+                            <tbody id="taskHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="task-clip-footer">
+                <button class="px-5 py-2 rounded bg-white border border-gray-300 text-gray-600 text-sm hover:bg-gray-50" onclick="TaskModule.closeClipModal()">取消</button>
+                <button class="px-5 py-2 rounded bg-blue-600 text-white text-sm font-medium hover:bg-blue-700" onclick="TaskModule.confirmSubmit()">确认提交</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ============ Scripts ============ -->
     <script src="js/data.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/views.js"></script>
     <script src="js/filmLibrary.js"></script>
     <script src="js/canvas.js"></script>
+    <script src="js/task.js"></script>
     <script src="js/delivery.js"></script>
     <script>
         FilmLibrary.render();
         CanvasModule.renderProjectList();
         CanvasModule.initCanvasEvents();
         DeliveryModule.render();
+        TaskModule.render();
         window.enterCanvasProject = CanvasModule.enterProject;
+        switchView('task');
     </script>
 </body>
 </html>

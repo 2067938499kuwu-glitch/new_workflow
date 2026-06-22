@@ -34,6 +34,9 @@ var ViewRouter = (function() {
         } else if (view === 'delivery') {
             Utils.byId('view-delivery').classList.add('active');
             DeliveryModule.render();
+        } else if (view === 'task' || view === 'cost') {
+            Utils.byId('view-task').classList.add('active');
+            TaskModule.render(view === 'cost' ? 'cost' : 'task');
         } else {
             Utils.byId('view-filmlibrary').classList.add('active');
             if (view === 'filmlibrary') FilmLibrary.render();

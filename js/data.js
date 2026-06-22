@@ -35,6 +35,38 @@ var AppData = (function() {
         {name:'测试引擎1',episodes:'7',category:'—',status:'待审核',statusClass:'tag-orange',deadline:'—',pending:2,rejected:0,approved:2}
     ];
 
+
+
+    var taskRoleTabs = [
+        { key: 'edit', label: '编辑' },
+        { key: 'produce', label: '制作' },
+        { key: 'clip', label: '剪辑' },
+        { key: 'manager', label: '制片' }
+    ];
+
+    var taskList = [
+        {
+            id: 1,
+            name: '海贼王',
+            projectType: '全部题材',
+            role: 'clip',
+            currentStep: '任务分发',
+            episodeRange: '1-3集',
+            mergeNote: '当前剧集第1与第2集需要合并在一起',
+            submitter: 'zhipian1',
+            submitTime: '2026/6/11 13:20:07',
+            reviewer: '审核人A',
+            reviewTime: '2026/6/11 14:05:00',
+            operationText: '资产设定 去分镜 剧本审核',
+            files: [
+                { type: '成片', name: 'EP01 成片.mp4', status: 'ok' },
+                { type: '图片', name: 'EP01 图片.mp4', status: 'ok' },
+                { type: '音频', name: 'EP01 音频.mp3', status: 'ok' },
+                { type: '字幕', name: 'EP01 字幕.srt', status: 'error' }
+            ]
+        }
+    ];
+
     var pageTitles = {
         dashboard:'数据大盘', resource:'资源中心', project:'项目管理', topic:'选题库',
         approval:'项目立项', task:'任务列表', cost:'成本工时管理', delivery:'交付中心',
@@ -50,6 +82,8 @@ var AppData = (function() {
         filmData: filmData,
         canvasProjects: canvasProjects,
         deliveryData: deliveryData,
+        taskRoleTabs: taskRoleTabs,
+        taskList: taskList,
         pageTitles: pageTitles,
         projectImages: projectImages,
         materialImages: materialImages,
