@@ -1,14 +1,14 @@
 /* AIGC管理后台 - 数据层 */
 var AppData = (function() {
     var filmData = [
-        {id:'#2314',name:'吾乃皇帝陛下',episodes:'60',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:false},
-        {id:'#2315',name:'吾乃皇帝陛下',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:false},
-        {id:'#2316',name:'吾乃皇帝陛下',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:true},
-        {id:'#2317',name:'ai',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:false},
-        {id:'#2318',name:'zhen new6',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:false},
-        {id:'#2319',name:'《致命客厅》',episodes:'6',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:true},
-        {id:'#2320',name:'《三日清空》',episodes:'4',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:false},
-        {id:'#2321',name:'测试项目1',episodes:'7',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:true}
+        {id:'#2314',name:'吾乃皇帝陛下',episodes:'60',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:false,uploaded:30,downloadStatus:'none'},
+        {id:'#2315',name:'吾乃皇帝陛下',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:false,uploaded:0,downloadStatus:'none'},
+        {id:'#2316',name:'吾乃皇帝陛下',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:true,uploaded:0,downloadStatus:'none'},
+        {id:'#2317',name:'ai',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:false,uploaded:0,downloadStatus:'none'},
+        {id:'#2318',name:'zhen new6',episodes:'—',category:'—',status:'待上传',statusClass:'text-gray-500 bg-gray-50 border-gray-200',deadline:'—',synced:false,uploaded:0,downloadStatus:'none'},
+        {id:'#2319',name:'《致命客厅》',episodes:'6',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:true,uploaded:6,downloadStatus:'none'},
+        {id:'#2320',name:'《三日清空》',episodes:'4',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:false,uploaded:3,downloadStatus:'none'},
+        {id:'#2321',name:'测试项目1',episodes:'7',category:'—',status:'待审核',statusClass:'text-orange-500 bg-orange-50 border-orange-100',deadline:'—',synced:true,uploaded:7,downloadStatus:'approved'}
     ];
 
     var canvasProjects = [
@@ -38,9 +38,12 @@ var AppData = (function() {
     var pageTitles = {
         dashboard:'数据大盘', resource:'资源中心', project:'项目管理', topic:'选题库',
         approval:'项目立项', task:'任务列表', cost:'成本工时管理', delivery:'交付中心',
-        filmlibrary:'成片库', canvas:'画布', upload:'上传文件'
+        filmlibrary:'成片库', canvas:'图片生成'
     };
 
+    // 已保存的图片数据
+    var projectImages = [];   // 项目库
+    var materialImages = [];  // 素材库
     var nextIdCounter = 2322;
 
     return {
@@ -48,6 +51,8 @@ var AppData = (function() {
         canvasProjects: canvasProjects,
         deliveryData: deliveryData,
         pageTitles: pageTitles,
+        projectImages: projectImages,
+        materialImages: materialImages,
         nextIdCounter: nextIdCounter
     };
 })();

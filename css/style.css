@@ -55,7 +55,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 }
 
 /* ============================================================
-   画布工作区 - 深色主题
+   图片生成工作区 - 深色主题
    ============================================================ */
 #workspace-canvas { background: #1a1a1a; }
 #canvasWorkspace {
@@ -213,8 +213,102 @@ input:checked + .slider:before { transform: translateX(20px); }
 }
 
 /* ============================================================
-   上传文件视图样式
+   Ant Design Pro 风格 - 成片库表格
    ============================================================ */
+.film-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+.film-table thead tr {
+    background: #F5F6F8;
+    border-radius: 8px;
+}
+.film-table thead th {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8c8c8c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    border: none;
+    text-align: left;
+}
+.film-table thead th:first-child {
+    border-radius: 8px 0 0 8px;
+}
+.film-table thead th:last-child {
+    border-radius: 0 8px 8px 0;
+    text-align: center;
+}
+.film-table tbody tr {
+    background: #FAFAFA;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+.film-table tbody tr:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #fff;
+}
+.film-table tbody td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border: none;
+    vertical-align: middle;
+}
+.film-table tbody td:first-child {
+    border-radius: 8px 0 0 8px;
+}
+.film-table tbody td:last-child {
+    border-radius: 0 8px 8px 0;
+    text-align: center;
+}
+/* 已完成剧集 - 全部完成显示绿色 */
+.episode-count {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+.episode-count.complete {
+    color: #52c41a;
+}
+/* 已同步文字 */
+.sync-done {
+    color: #52c41a;
+    font-weight: 500;
+}
+.sync-pending {
+    color: #bfbfbf;
+}
+/* 操作按钮 */
+.action-btn {
+    color: #409eff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.action-btn:hover {
+    background: rgba(64,158,255,0.08);
+}
+/* 项目 ID */
+.project-id {
+    color: #409eff;
+    font-weight: 600;
+    cursor: pointer;
+}
+.project-id:hover {
+    color: #096dd9;
+}
+/* 取消包裹容器的 overflow-hidden，让卡片间隔显示出来 */
+.film-table-wrapper {
+    overflow: visible !important;
+}
 .upload-modal-header { background: #fff; }
 .upload-tab-btn { transition: all 0.2s ease; }
 .upload-tab-btn:hover { border-color: #c6e2ff; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
@@ -383,4 +477,93 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 @media (max-width: 720px) {
     .upload-modal-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+
+/* ============================================================
+   下载水印弹窗
+   ============================================================ */
+.download-modal {
+    width: min(92%, 460px);
+    background: #fff;
+    border-radius: 12px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+.download-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.download-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fafafa;
+}
+.download-option:hover {
+    border-color: #409eff;
+    background: #f0f7ff;
+    box-shadow: 0 2px 8px rgba(64,158,255,0.1);
+}
+.download-option-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #e8f0fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #409eff;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.download-option-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.download-option-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+.download-option-desc {
+    font-size: 12px;
+    color: #999;
+    margin-top: 2px;
+}
+.download-option-check {
+    color: #ccc;
+    font-size: 18px;
+}
+.download-option:hover .download-option-check {
+    color: #409eff;
+}
+
+/* 下载按钮状态 */
+.download-btn {
+    color: #e6a23c !important;
+}
+.download-btn:hover {
+    background: rgba(230,162,60,0.08) !important;
+}
+.download-btn-applying {
+    color: #bfbfbf !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}
+.download-btn-ready {
+    color: #52c41a !important;
+}
+.download-btn-ready:hover {
+    background: rgba(82,196,26,0.08) !important;
 }

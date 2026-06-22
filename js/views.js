@@ -3,7 +3,7 @@ var ViewRouter = (function() {
     var currentView = 'filmlibrary';
 
     function switchView(view) {
-        // 离开画布工作区
+        // 离开图片生成工作区
         Utils.byId('mainContent').style.display = '';
         Utils.byId('workspace-canvas').classList.add('hidden');
 
@@ -34,8 +34,6 @@ var ViewRouter = (function() {
         } else if (view === 'delivery') {
             Utils.byId('view-delivery').classList.add('active');
             DeliveryModule.render();
-        } else if (view === 'upload') {
-            Utils.byId('view-upload').classList.add('active');
         } else {
             Utils.byId('view-filmlibrary').classList.add('active');
             if (view === 'filmlibrary') FilmLibrary.render();

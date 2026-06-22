@@ -16,7 +16,7 @@ var DeliveryModule = (function() {
                 + '<td class="py-3 px-4">' + r.rejected + '</td>'
                 + '<td class="py-3 px-4">' + r.approved + '</td>'
                 + '<td class="py-3 px-4">'
-                + '<button class="text-orange-500 hover:underline text-xs mr-2" onclick="switchView(\'upload\')">上传</button>'
+                + '<button class="text-orange-500 hover:underline text-xs mr-2" onclick="DeliveryModule.showUploadModal()">上传</button>'
                 + '<button class="text-green-500 hover:underline text-xs">审核</button>'
                 + '</td>'
                 + '</tr>';
@@ -86,6 +86,29 @@ var DeliveryModule = (function() {
     function init() {
         initUploadTabs();
         initDetailModal();
+        initUploadModal();
+    }
+
+    // ===== 上传文件弹窗 =====
+    function showUploadModal() {
+        var modal = Utils.byId('uploadFileModal');
+        if (!modal) return;
+        modal.classList.add('is-visible');
+    }
+
+    function closeUploadModal() {
+        var modal = Utils.byId('uploadFileModal');
+        if (!modal) return;
+        modal.classList.remove('is-visible');
+    }
+
+    function initUploadModal() {
+        var modal = Utils.byId('uploadFileModal');
+        if (!modal) return;
+        // 点击遮罩关闭
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeUploadModal();
+        });
     }
 
     // 页面加载后初始化
@@ -94,6 +117,8 @@ var DeliveryModule = (function() {
     return {
         render: render,
         initUploadTabs: initUploadTabs,
-        showDetailModal: showDetailModal
+        showDetailModal: showDetailModal,
+        showUploadModal: showUploadModal,
+        closeUploadModal: closeUploadModal
     };
 })();

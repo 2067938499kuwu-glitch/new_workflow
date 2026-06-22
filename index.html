@@ -42,10 +42,7 @@
                 <i class="fa-solid fa-photo-film w-6 text-gray-400"></i><span>成片库</span>
             </div>
             <div class="nav-item flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-md" onclick="switchView('canvas')">
-                <i class="fa-solid fa-palette w-6 text-gray-400"></i><span>画布</span>
-            </div>
-            <div class="nav-item flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-md" onclick="switchView('upload')">
-                <i class="fa-solid fa-cloud-arrow-up w-6 text-gray-400"></i><span>上传文件</span>
+                <i class="fa-solid fa-palette w-6 text-gray-400"></i><span>图片生成</span>
             </div>
         </nav>
     </div>
@@ -81,13 +78,13 @@
                         <div class="flex items-center space-x-2"><span class="font-bold text-gray-800 text-sm">交付项目列表</span><span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">共 8 项</span></div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead><tr class="bg-gray-50 text-gray-500 border-b border-gray-200 text-xs font-semibold uppercase tracking-wider">
-                                <th class="py-3 px-4">项目ID</th><th class="py-3 px-4">项目名称</th><th class="py-3 px-4">项目总剧集</th><th class="py-3 px-4">项目分类</th><th class="py-3 px-4">项目状态</th><th class="py-3 px-4">项目截止时间</th><th class="py-3 px-4">同步到运营</th><th class="py-3 px-4 text-center">操作</th>
+                <div class="bg-white rounded-lg border border-gray-200 shadow-sm film-table-wrapper">
+                    <div class="overflow-x-auto px-1 py-1">
+                        <table class="film-table">
+                            <thead><tr>
+                                <th>项目ID</th><th>项目名称</th><th>项目总剧集</th><th>项目分类</th><th>已完成剧集</th><th>项目截止时间</th><th>同步到运营</th><th class="text-center">操作</th>
                             </tr></thead>
-                            <tbody class="divide-y divide-gray-100 text-xs" id="filmTableBody"></tbody>
+                            <tbody id="filmTableBody"></tbody>
                         </table>
                     </div>
                     <div class="bg-white px-4 py-3.5 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
@@ -102,11 +99,40 @@
                 </div>
             </div>
 
-            <!-- ====== 画布项目列表 ====== -->
+            <!-- ====== 图片生成项目列表 ====== -->
             <div id="view-canvas-projects" class="view-panel space-y-4">
-                <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4">选择项目进入画布</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="canvasProjectGrid"></div>
+                <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                        <div class="flex items-center space-x-2"><span class="text-gray-500 whitespace-nowrap">项目名称</span><input type="text" placeholder="请输入项目名称" class="w-full border border-gray-300 rounded px-3 py-1.5 text-xs focus:border-blue-500 outline-none"></div>
+                        <div class="flex items-center space-x-2"><span class="text-gray-500 whitespace-nowrap">项目题材</span><select class="w-full border border-gray-300 rounded px-3 py-1.5 text-xs focus:border-blue-500 outline-none"><option>全部题材</option><option>短剧</option><option>悬疑</option><option>都市</option><option>科幻</option><option>武侠</option><option>奇幻</option><option>生活</option><option>探险</option><option>动漫</option><option>广告</option></select></div>
+                        <div class="flex items-center space-x-2"><span class="text-gray-500 whitespace-nowrap">项目状态</span><select class="w-full border border-gray-300 rounded px-3 py-1.5 text-xs focus:border-blue-500 outline-none"><option>全部状态</option><option>进行中</option><option>已完成</option></select></div>
+                        <div class="flex items-center space-x-2 justify-start md:justify-end">
+                            <button class="bg-blue-600 text-white px-5 py-1.5 rounded text-xs hover:bg-blue-700 font-medium">查询</button>
+                            <button class="border border-gray-300 text-gray-600 px-5 py-1.5 rounded text-xs hover:bg-gray-50 font-medium bg-white">重置</button>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-2"><span class="font-bold text-gray-800 text-sm">图片生成项目</span><span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full" id="canvasProjectCount">共 9 项</span></div>
+                        <button onclick="CanvasModule.showCreateProjectModal()" class="bg-blue-600 text-white px-4 py-1.5 rounded text-xs hover:bg-blue-700 font-medium flex items-center gap-1"><i class="fa-solid fa-plus"></i>新建项目</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead><tr class="bg-gray-50 text-gray-500 border-b border-gray-200 text-xs font-semibold uppercase tracking-wider">
+                                <th class="py-3 px-4">项目ID</th><th class="py-3 px-4">项目名称</th><th class="py-3 px-4">项目题材</th><th class="py-3 px-4">剧集数</th><th class="py-3 px-4">项目描述</th><th class="py-3 px-4 text-center">操作</th>
+                            </tr></thead>
+                            <tbody class="divide-y divide-gray-100 text-xs" id="canvasProjectTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="bg-white px-4 py-3.5 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+                        <span id="canvasProjectTotal">共 9 条</span>
+                        <div class="flex items-center gap-2">
+                            <button class="px-3 py-1 border rounded bg-white hover:border-gray-400 cursor-not-allowed text-gray-400">上一页</button>
+                            <button class="px-3 py-1 border rounded bg-blue-500 text-white">1</button>
+                            <button class="px-3 py-1 border rounded bg-white hover:border-gray-400 cursor-not-allowed text-gray-400">下一页</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -143,165 +169,9 @@
                 </div>
             </div>
 
-            <!-- ====== 上传文件视图 ====== -->
-            <div id="view-upload" class="view-panel space-y-4">
-                <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="upload-modal-header flex items-center justify-between p-5 border-b border-gray-100">
-                        <h1 class="text-lg font-semibold text-gray-800">上传文件</h1>
-                        <div class="flex items-center gap-2">
-                            <button class="px-3 py-1.5 rounded bg-white border border-blue-400 text-blue-500 text-xs font-medium hover:bg-blue-50">上传文件格式说明</button>
-                            <button class="px-3 py-1.5 rounded bg-blue-500 text-white text-xs font-medium hover:bg-blue-600">上传资源</button>
-                        </div>
-                    </div>
-                    <div class="flex gap-4 p-5 bg-gray-50/50">
-                        <!-- 左侧资源标签 -->
-                        <div class="w-52 flex-shrink-0 space-y-2">
-                            <button class="upload-tab-btn upload-tab-active w-full text-left p-3 rounded-md bg-white border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="video">
-                                <span class="block font-semibold text-gray-800">视频</span>
-                                <span class="block text-xs text-gray-400">68集视频</span>
-                                <span class="block text-xs text-red-400">14、60、61需要进行修改</span>
-                            </button>
-                            <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-white border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="image">
-                                <span class="block font-semibold text-gray-800">分集图片</span>
-                                <span class="block text-xs text-gray-400">68张</span>
-                            </button>
-                            <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-white border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="cover">
-                                <span class="block font-semibold text-gray-800">封面</span>
-                                <span class="block text-xs text-gray-400">6张封面</span>
-                            </button>
-                            <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-white border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="trailer">
-                                <span class="block font-semibold text-gray-800">预告片</span>
-                                <span class="block text-xs text-gray-400">3段视频</span>
-                            </button>
-                            <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-white border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="asset">
-                                <span class="block font-semibold text-gray-800">资产</span>
-                                <span class="block text-xs text-gray-400">10个文件</span>
-                            </button>
-                        </div>
-                        <!-- 右侧内容区 -->
-                        <div class="flex-1 min-w-0 space-y-3">
-                            <!-- 视频内容 -->
-                            <div id="upload-video-content" class="upload-content-panel">
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="flex items-baseline gap-2"><span class="text-lg font-semibold text-gray-800">视频</span><span class="text-xs text-gray-400">支持拖拽进行剧集的排序</span></div>
-                                    <button class="px-3 py-1.5 rounded bg-white border border-gray-200 text-gray-500 text-xs hover:border-blue-400 hover:text-blue-500">恢复到原始排序</button>
-                                </div>
-                                <div class="sort-panel-section flex items-center gap-2 p-3 bg-white border border-gray-200 rounded-md text-xs text-gray-500 mb-4">
-                                    <span>将第</span><input type="text" class="w-20 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none"><span>集移至第</span><input type="text" class="w-20 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none"><span>集</span>
-                                    <button class="h-8 px-4 bg-blue-500 text-white rounded text-xs font-medium hover:bg-blue-600">确认</button>
-                                </div>
-                                <div class="grid grid-cols-6 gap-5">
-                                    <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第1集')">
-                                        <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第1集</span><span class="text-[10px] text-gray-400">原稿：1</span></div>
-                                        <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
-                                    </div>
-                                    <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第2集')">
-                                        <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第2集</span><span class="text-[10px] text-gray-400">原稿：2</span></div>
-                                        <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
-                                    </div>
-                                    <div class="episode-card-item border border-orange-200 bg-yellow-50/30 rounded-md p-3 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第3集')">
-                                        <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第3集</span><span class="text-[10px] text-gray-400">原稿：3</span></div>
-                                        <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
-                                    </div>
-                                    <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第4集')">
-                                        <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第4集</span><span class="text-[10px] text-gray-400">原稿：4</span></div>
-                                        <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
-                                    </div>
-                                    <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第5集')">
-                                        <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第5集</span><span class="text-[10px] text-gray-400">原稿：5</span></div>
-                                        <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
-                                    </div>
-                                    <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第6集')">
-                                        <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第6集</span><span class="text-[10px] text-gray-400">原稿：6</span></div>
-                                        <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 分集图片内容 -->
-                            <div id="upload-image-content" class="upload-content-panel hidden">
-                                <div class="flex items-center mb-3"><span class="text-lg font-semibold text-gray-800">分集图片</span></div>
-                                <div class="grid grid-cols-4 gap-4">
-                                    <div class="image-upload-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition cursor-pointer">
-                                        <div class="aspect-video bg-gradient-to-br from-gray-200 to-gray-100 flex items-center justify-center relative">
-                                            <span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第1集</span>
-                                            <i class="fa-solid fa-image text-gray-300 text-2xl"></i>
-                                        </div>
-                                        <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">1.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第1集</span></div><div class="text-xs text-blue-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500 mr-1"></span>审核中</div></div>
-                                    </div>
-                                    <div class="image-upload-card approved bg-white border border-green-200 rounded-lg overflow-hidden hover:shadow-md transition cursor-pointer">
-                                        <div class="aspect-video bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center relative">
-                                            <span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第2集</span>
-                                            <i class="fa-solid fa-image text-green-300 text-2xl"></i>
-                                        </div>
-                                        <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">2.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第2集</span></div><div class="text-xs text-green-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>审核通过</div></div>
-                                    </div>
-                                    <div class="image-upload-card rejected bg-white border border-red-200 rounded-lg overflow-hidden hover:shadow-md transition cursor-pointer">
-                                        <div class="aspect-video bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center relative">
-                                            <span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第3集</span>
-                                            <i class="fa-solid fa-image text-red-300 text-2xl"></i>
-                                        </div>
-                                        <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">3.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第3集</span></div><div class="text-xs text-red-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>审核驳回：图片需要修改</div></div>
-                                    </div>
-                                    <div class="image-upload-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition cursor-pointer">
-                                        <div class="aspect-video bg-gradient-to-br from-gray-200 to-gray-100 flex items-center justify-center relative">
-                                            <span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第4集</span>
-                                            <i class="fa-solid fa-image text-gray-300 text-2xl"></i>
-                                        </div>
-                                        <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">4.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第4集</span></div><div class="text-xs text-blue-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500 mr-1"></span>审核中</div></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 预告片内容 -->
-                            <div id="upload-trailer-content" class="upload-content-panel hidden">
-                                <div class="flex items-center mb-3"><span class="text-lg font-semibold text-gray-800">预告片</span></div>
-                                <div class="grid grid-cols-2 gap-5">
-                                    <div class="bg-white border border-green-200 rounded-xl overflow-hidden hover:shadow-lg transition cursor-pointer">
-                                        <div class="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative">
-                                            <span class="absolute top-3 left-3 px-2 py-1 bg-black/60 text-white text-[10px] rounded-full">预告片</span>
-                                            <span class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/70 text-white text-[10px] rounded">02:15</span>
-                                            <div class="w-14 h-14 rounded-full bg-white/15 backdrop-blur flex items-center justify-center"><i class="fa-solid fa-play text-white text-lg ml-1"></i></div>
-                                        </div>
-                                        <div class="p-4"><div class="flex justify-between items-center mb-2"><span class="font-semibold text-sm">预告片-1</span><span class="text-xs text-green-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>审核通过</span></div><div class="flex gap-3 text-xs text-gray-400"><span><i class="fa-regular fa-clock mr-1"></i></span><span><i class="fa-solid fa-film mr-1"></i></span></div></div>
-                                    </div>
-                                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition cursor-pointer">
-                                        <div class="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative">
-                                            <span class="absolute top-3 left-3 px-2 py-1 bg-black/60 text-white text-[10px] rounded-full">预告片</span>
-                                            <span class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/70 text-white text-[10px] rounded">01:48</span>
-                                            <div class="w-14 h-14 rounded-full bg-white/15 backdrop-blur flex items-center justify-center"><i class="fa-solid fa-play text-white text-lg ml-1"></i></div>
-                                        </div>
-                                        <div class="p-4"><div class="flex justify-between items-center mb-2"><span class="font-semibold text-sm">预告片-2</span><span class="text-xs text-gray-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-gray-400 mr-1"></span>审核中</span></div><div class="flex gap-3 text-xs text-gray-400"><span><i class="fa-regular fa-clock mr-1"></i></span><span><i class="fa-solid fa-film mr-1"></i></span></div></div>
-                                    </div>
-                                    <div class="bg-white border border-red-200 rounded-xl overflow-hidden hover:shadow-lg transition cursor-pointer">
-                                        <div class="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative">
-                                            <span class="absolute top-3 left-3 px-2 py-1 bg-black/60 text-white text-[10px] rounded-full">预告片</span>
-                                            <span class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/70 text-white text-[10px] rounded">03:22</span>
-                                            <div class="w-14 h-14 rounded-full bg-white/15 backdrop-blur flex items-center justify-center"><i class="fa-solid fa-play text-white text-lg ml-1"></i></div>
-                                        </div>
-                                        <div class="p-4"><div class="flex justify-between items-center mb-2"><span class="font-semibold text-sm">预告片-3</span><span class="text-xs text-red-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>审核驳回：视频需要修改</span></div><div class="flex gap-3 text-xs text-gray-400"><span><i class="fa-regular fa-clock mr-1"></i></span><span><i class="fa-solid fa-film mr-1"></i></span></div></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 封面/资产占位 -->
-                            <div id="upload-cover-content" class="upload-content-panel hidden">
-                                <div class="flex items-center mb-3"><span class="text-lg font-semibold text-gray-800">封面</span></div>
-                                <div class="text-center text-gray-400 py-12">封面资源管理区域</div>
-                            </div>
-                            <div id="upload-asset-content" class="upload-content-panel hidden">
-                                <div class="flex items-center mb-3"><span class="text-lg font-semibold text-gray-800">资产</span></div>
-                                <div class="text-center text-gray-400 py-12">资产文件管理区域</div>
-                            </div>
-                            <!-- 底部按钮 -->
-                            <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
-                                <button class="px-5 py-2 rounded bg-white border border-gray-300 text-gray-600 text-sm hover:bg-gray-50">取消</button>
-                                <button class="px-5 py-2 rounded bg-blue-500 text-white text-sm font-medium hover:bg-blue-600">确认</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- ============ 画布工作区 ============ -->
+        <!-- ============ 图片生成工作区 ============ -->
         <div id="workspace-canvas" class="hidden flex-1 flex flex-col min-h-0">
             <div id="canvasToolbar" class="px-4 py-2 flex items-center justify-between flex-shrink-0">
                 <div class="flex items-center space-x-3">
@@ -329,13 +199,13 @@
                 </div>
                 <div class="flex-1 flex flex-col min-w-0 min-h-0">
                     <div class="px-3 py-1.5 flex items-center justify-between flex-shrink-0" style="font-size:10px;color:#666;background:#1c1c1c;border-bottom:1px solid #2a2a2a;">
-                        <span>右键画布添加节点 | 拖拽节点卡片移动位置 | 滚轮缩放</span>
+                        <span>右键添加节点 | 拖拽节点卡片移动位置 | 滚轮缩放</span>
                         <span id="canvasCoord">X:0 Y:0</span>
                     </div>
                     <div id="canvasWorkspace" class="flex-1 overflow-auto relative min-h-0">
                         <div id="canvasContent" class="relative" style="min-width:100%;min-height:100%;padding:40px;">
                             <div id="canvasEmpty" class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div class="text-center" style="color:#555"><i class="fa-solid fa-panorama text-5xl mb-3 block"></i><p class="text-sm">右键画布添加节点 | 左侧输入提示词生成图片</p></div>
+                                <div class="text-center" style="color:#555"><i class="fa-solid fa-panorama text-5xl mb-3 block"></i><p class="text-sm">右键添加节点 | 左侧输入提示词生成图片</p></div>
                             </div>
                             <div id="canvasCardsArea"></div>
                         </div>
@@ -345,6 +215,45 @@
                         <div id="generateHistory" class="flex px-3 py-2 gap-2 overflow-x-auto" style="max-height:60px;"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 下载水印选择弹窗 ============ -->
+    <div id="downloadModal" class="detail-overlay">
+        <div class="download-modal">
+            <div class="detail-topbar">
+                <h2 class="detail-title">选择下载方式</h2>
+                <button class="detail-close" onclick="FilmLibrary.closeDownloadModal()">&times;</button>
+            </div>
+            <div class="download-body">
+                <div class="download-option" onclick="FilmLibrary.confirmDownload('none')">
+                    <div class="download-option-icon"><i class="fa-solid fa-water"></i></div>
+                    <div class="download-option-info">
+                        <span class="download-option-title">无水印</span>
+                        <span class="download-option-desc">原始画质，无任何水印标记</span>
+                    </div>
+                    <div class="download-option-check"><i class="fa-regular fa-circle"></i></div>
+                </div>
+                <div class="download-option" onclick="FilmLibrary.confirmDownload('visible')">
+                    <div class="download-option-icon"><i class="fa-solid fa-eye"></i></div>
+                    <div class="download-option-info">
+                        <span class="download-option-title">明水印</span>
+                        <span class="download-option-desc">画面角落可见平台水印标识</span>
+                    </div>
+                    <div class="download-option-check"><i class="fa-regular fa-circle"></i></div>
+                </div>
+                <div class="download-option" onclick="FilmLibrary.confirmDownload('invisible')">
+                    <div class="download-option-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="download-option-info">
+                        <span class="download-option-title">暗水印</span>
+                        <span class="download-option-desc">不可见数字水印，可追溯版权</span>
+                    </div>
+                    <div class="download-option-check"><i class="fa-regular fa-circle"></i></div>
+                </div>
+            </div>
+            <div class="detail-footer" style="text-align:center;">
+                <button class="px-6 py-2 rounded bg-gray-100 text-gray-600 text-sm hover:bg-gray-200 mr-3" onclick="FilmLibrary.closeDownloadModal()">取消</button>
             </div>
         </div>
     </div>
@@ -368,6 +277,129 @@
             <div class="detail-footer p-4 border-t border-gray-200 bg-gray-50">
                 <div class="text-xs text-gray-400 font-semibold uppercase mb-2">审核意见</div>
                 <div class="text-sm text-red-500 font-medium p-3 bg-red-50 rounded-lg border border-red-200">审核未通过的驳回信息</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 上传文件弹窗 ============ -->
+    <div id="uploadFileModal" class="detail-overlay">
+        <div class="detail-modal" style="max-width:1300px;">
+            <div class="detail-topbar">
+                <h2 class="detail-title">上传文件</h2>
+                <button class="detail-close" onclick="DeliveryModule.closeUploadModal()">&times;</button>
+            </div>
+            <div class="detail-body flex gap-4 flex-1 min-h-0 p-4">
+                <div class="w-44 flex-shrink-0 space-y-2">
+                    <button class="upload-tab-btn upload-tab-active w-full text-left p-3 rounded-md bg-gray-50 border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="video">
+                        <span class="block font-semibold text-gray-800 text-sm">视频</span>
+                        <span class="block text-xs text-gray-400">68集视频</span>
+                        <span class="block text-xs text-red-400">14、60、61需修改</span>
+                    </button>
+                    <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-gray-50 border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="image">
+                        <span class="block font-semibold text-gray-800 text-sm">分集图片</span>
+                        <span class="block text-xs text-gray-400">68张</span>
+                    </button>
+                    <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-gray-50 border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="cover">
+                        <span class="block font-semibold text-gray-800 text-sm">封面</span>
+                        <span class="block text-xs text-gray-400">6张封面</span>
+                    </button>
+                    <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-gray-50 border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="trailer">
+                        <span class="block font-semibold text-gray-800 text-sm">预告片</span>
+                        <span class="block text-xs text-gray-400">3段视频</span>
+                    </button>
+                    <button class="upload-tab-btn w-full text-left p-3 rounded-md bg-gray-50 border border-gray-200 hover:border-blue-300 transition text-sm" data-tab="asset">
+                        <span class="block font-semibold text-gray-800 text-sm">资产</span>
+                        <span class="block text-xs text-gray-400">10个文件</span>
+                    </button>
+                </div>
+                <div class="flex-1 min-w-0 space-y-3">
+                    <div id="upload-video-content" class="upload-content-panel">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-baseline gap-2"><span class="text-lg font-semibold text-gray-800">视频</span><span class="text-xs text-gray-400">支持拖拽进行剧集排序</span></div>
+                            <button class="px-3 py-1.5 rounded bg-white border border-gray-200 text-gray-500 text-xs hover:border-blue-400 hover:text-blue-500">恢复到原始排序</button>
+                        </div>
+                        <div class="sort-panel-section flex items-center gap-2 p-3 bg-white border border-gray-200 rounded-md text-xs text-gray-500 mb-4">
+                            <span>将第</span><input type="text" class="w-20 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none"><span>集移至第</span><input type="text" class="w-20 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none"><span>集</span>
+                            <button class="h-8 px-4 bg-blue-500 text-white rounded text-xs font-medium hover:bg-blue-600">确认</button>
+                        </div>
+                        <div class="grid grid-cols-6 gap-4">
+                            <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第1集')">
+                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第1集</span><span class="text-[10px] text-gray-400">原稿：1</span></div>
+                                <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
+                            </div>
+                            <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第2集')">
+                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第2集</span><span class="text-[10px] text-gray-400">原稿：2</span></div>
+                                <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
+                            </div>
+                            <div class="episode-card-item border border-orange-200 bg-yellow-50/30 rounded-md p-3 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第3集')">
+                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第3集</span><span class="text-[10px] text-gray-400">原稿：3</span></div>
+                                <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
+                            </div>
+                            <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第4集')">
+                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第4集</span><span class="text-[10px] text-gray-400">原稿：4</span></div>
+                                <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
+                            </div>
+                            <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第5集')">
+                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第5集</span><span class="text-[10px] text-gray-400">原稿：5</span></div>
+                                <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
+                            </div>
+                            <div class="episode-card-item border border-gray-200 bg-gray-50/70 rounded-md p-3 hover:border-blue-300 hover:shadow-sm transition cursor-pointer" onclick="DeliveryModule.showDetailModal('第6集')">
+                                <div class="flex justify-between items-center mb-2"><span class="px-2 py-0.5 bg-gray-800 text-white text-[10px] rounded-full font-semibold">第6集</span><span class="text-[10px] text-gray-400">原稿：6</span></div>
+                                <div class="grid grid-cols-2 gap-1.5"><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">成片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">图片</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">音频</button><button class="h-7 border border-gray-200 bg-white rounded text-[11px] text-gray-600 hover:text-blue-500 hover:border-blue-400">字幕</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="upload-image-content" class="upload-content-panel hidden">
+                        <div class="flex items-center mb-3"><span class="text-lg font-semibold text-gray-800">分集图片</span></div>
+                        <div class="grid grid-cols-4 gap-4">
+                            <div class="image-upload-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition cursor-pointer">
+                                <div class="aspect-video bg-gradient-to-br from-gray-200 to-gray-100 flex items-center justify-center relative"><span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第1集</span><i class="fa-solid fa-image text-gray-300 text-2xl"></i></div>
+                                <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">1.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第1集</span></div><div class="text-xs text-blue-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500 mr-1"></span>审核中</div></div>
+                            </div>
+                            <div class="image-upload-card approved bg-white border border-green-200 rounded-lg overflow-hidden hover:shadow-md transition cursor-pointer">
+                                <div class="aspect-video bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center relative"><span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第2集</span><i class="fa-solid fa-image text-green-300 text-2xl"></i></div>
+                                <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">2.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第2集</span></div><div class="text-xs text-green-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>审核通过</div></div>
+                            </div>
+                            <div class="image-upload-card rejected bg-white border border-red-200 rounded-lg overflow-hidden hover:shadow-md transition cursor-pointer">
+                                <div class="aspect-video bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center relative"><span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第3集</span><i class="fa-solid fa-image text-red-300 text-2xl"></i></div>
+                                <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">3.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第3集</span></div><div class="text-xs text-red-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>审核驳回：图片需要修改</div></div>
+                            </div>
+                            <div class="image-upload-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition cursor-pointer">
+                                <div class="aspect-video bg-gradient-to-br from-gray-200 to-gray-100 flex items-center justify-center relative"><span class="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] rounded-full">第4集</span><i class="fa-solid fa-image text-gray-300 text-2xl"></i></div>
+                                <div class="p-3"><div class="flex justify-between items-start mb-2"><span class="text-sm font-semibold">4.png</span><span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 rounded-full">已匹配到第4集</span></div><div class="text-xs text-blue-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500 mr-1"></span>审核中</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="upload-trailer-content" class="upload-content-panel hidden">
+                        <div class="flex items-center mb-3"><span class="text-lg font-semibold text-gray-800">预告片</span></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white border border-green-200 rounded-xl overflow-hidden hover:shadow-lg transition cursor-pointer">
+                                <div class="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative"><span class="absolute top-3 left-3 px-2 py-1 bg-black/60 text-white text-[10px] rounded-full">预告片</span><span class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/70 text-white text-[10px] rounded">02:15</span><div class="w-14 h-14 rounded-full bg-white/15 backdrop-blur flex items-center justify-center"><i class="fa-solid fa-play text-white text-lg ml-1"></i></div></div>
+                                <div class="p-4"><div class="flex justify-between items-center mb-2"><span class="font-semibold text-sm">预告片-1</span><span class="text-xs text-green-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>审核通过</span></div><div class="flex gap-3 text-xs text-gray-400"><span><i class="fa-regular fa-clock mr-1"></i></span><span><i class="fa-solid fa-film mr-1"></i></span></div></div>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition cursor-pointer">
+                                <div class="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative"><span class="absolute top-3 left-3 px-2 py-1 bg-black/60 text-white text-[10px] rounded-full">预告片</span><span class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/70 text-white text-[10px] rounded">01:48</span><div class="w-14 h-14 rounded-full bg-white/15 backdrop-blur flex items-center justify-center"><i class="fa-solid fa-play text-white text-lg ml-1"></i></div></div>
+                                <div class="p-4"><div class="flex justify-between items-center mb-2"><span class="font-semibold text-sm">预告片-2</span><span class="text-xs text-gray-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-gray-400 mr-1"></span>审核中</span></div><div class="flex gap-3 text-xs text-gray-400"><span><i class="fa-regular fa-clock mr-1"></i></span><span><i class="fa-solid fa-film mr-1"></i></span></div></div>
+                            </div>
+                            <div class="bg-white border border-red-200 rounded-xl overflow-hidden hover:shadow-lg transition cursor-pointer">
+                                <div class="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center relative"><span class="absolute top-3 left-3 px-2 py-1 bg-black/60 text-white text-[10px] rounded-full">预告片</span><span class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/70 text-white text-[10px] rounded">03:22</span><div class="w-14 h-14 rounded-full bg-white/15 backdrop-blur flex items-center justify-center"><i class="fa-solid fa-play text-white text-lg ml-1"></i></div></div>
+                                <div class="p-4"><div class="flex justify-between items-center mb-2"><span class="font-semibold text-sm">预告片-3</span><span class="text-xs text-red-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>审核驳回：视频需要修改</span></div><div class="flex gap-3 text-xs text-gray-400"><span><i class="fa-regular fa-clock mr-1"></i></span><span><i class="fa-solid fa-film mr-1"></i></span></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="upload-cover-content" class="upload-content-panel hidden">
+                        <span class="text-lg font-semibold text-gray-800 block mb-3">封面</span>
+                        <div class="text-center text-gray-400 py-12">封面资源管理区域</div>
+                    </div>
+                    <div id="upload-asset-content" class="upload-content-panel hidden">
+                        <span class="text-lg font-semibold text-gray-800 block mb-3">资产</span>
+                        <div class="text-center text-gray-400 py-12">资产文件管理区域</div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-footer">
+                <button class="px-5 py-2 rounded bg-white border border-gray-300 text-gray-600 text-sm hover:bg-gray-50 mr-3" onclick="DeliveryModule.closeUploadModal()">取消</button>
+                <button class="px-5 py-2 rounded bg-blue-500 text-white text-sm font-medium hover:bg-blue-600">确认</button>
             </div>
         </div>
     </div>
