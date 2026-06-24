@@ -102,34 +102,187 @@ var FilmLibrary = (function() {
     }
 
     function fillEpisodeOptions(item) {
-        var episodeSelect = Utils.byId('filmEpisodeSelect');
-        if (!episodeSelect) return;
+        var container = Utils.byId('filmEpisodeCheckboxList');
+        if (!container) return;
 
-        var total = parseInt(item.episodes, 10);
-        if (!total || total < 1) total = Math.max(parseInt(item.uploaded, 10) || 1, 1);
+        var total = parseInt(item.episodes, 10) || 0;
+        if (!total || total < 1) total = 60;
 
         var html = '';
         for (var i = 1; i <= total; i++) {
-            html += '<option value="' + i + '">第 ' + i + ' 集</option>';
+            html += '<label class="episode-badge" onclick="FilmLibrary.toggleEpisodeBadge(this, ' + i + ')">'
+                + '<input type="checkbox" class="episode-checkbox" value="' + i + '">'
+                + i
+                + '</label>';
         }
-        episodeSelect.innerHTML = html;
+        container.innerHTML = html;
+        updateEpisodeCount();
+    }
+
+    function toggleEpisodeBadge(labelEl, idx) {
+        var cb = labelEl.querySelector('input');
+        cb.checked = !cb.checked;
+        labelEl.classList.toggle('is-active', cb.checked);
+        onSelectionChange();
+    }
+
+    function toggleSelectAllEpisodes() {
+        var badges = document.querySelectorAll('#filmEpisodeCheckboxList .episode-badge');
+        var allChecked = true;
+        badges.forEach(function(b) {
+            if (!b.querySelector('input').checked) allChecked = false;
+        });
+
+        var shouldCheck = !allChecked;
+        badges.forEach(function(b) {
+            b.querySelector('input').checked = shouldCheck;
+            b.classList.toggle('is-active', shouldCheck);
+        });
+        onSelectionChange();
+    }
+
+    function updateEpisodeCount() {
+        var countEl = Utils.byId('filmEpisodeCount');
+        var selectAllBtn = Utils.byId('filmEpisodeSelectAll');
+        if (!countEl) return;
+
+        var checked = document.querySelectorAll('#filmEpisodeCheckboxList .episode-checkbox:checked');
+        var total = document.querySelectorAll('#filmEpisodeCheckboxList .episode-checkbox').length;
+        countEl.textContent = '已选 ' + checked.length + ' 集';
+        countEl.classList.toggle('has-selection', checked.length > 0);
+
+        if (selectAllBtn) {
+            var isAll = checked.length === total && total > 0;
+            selectAllBtn.textContent = isAll ? '取消全选' : '全选';
+            selectAllBtn.classList.toggle('is-all', isAll);
+        }
+    }
+
+    function fillTrailerOptions() {
+        var container = Utils.byId('filmTrailerCheckboxList');
+        if (!container) return;
+
+        var html = '';
+        for (var i = 1; i <= 3; i++) {
+            html += '<label class="checkbox-item">'
+                + '<input type="checkbox" class="trailer-checkbox" value="预告片 ' + i + '" onchange="FilmLibrary.onSelectionChange()">'
+                + '<span>预告片 ' + i + '</span>'
+                + '</label>';
+        }
+        container.innerHTML = html;
+    }
+
+    function onSelectionChange() {
+        var typeSelect = Utils.byId('filmReuploadType');
+        var imagesContainer = Utils.byId('filmSelectionImagesContainer');
+        var imagesField = Utils.byId('filmSelectionImages');
+        if (!typeSelect || !imagesContainer || !imagesField) return;
+
+        var type = typeSelect.value;
+        var checkboxes;
+        if (type === 'video') {
+            updateEpisodeCount();
+            checkboxes = document.querySelectorAll('#filmEpisodeCheckboxList .episode-checkbox:checked');
+        } else if (type === 'trailer') {
+            checkboxes = document.querySelectorAll('#filmTrailerCheckboxList .trailer-checkbox:checked');
+        } else {
+            imagesField.classList.add('hidden');
+            return;
+        }
+
+        if (checkboxes.length === 0) {
+            imagesField.classList.add('hidden');
+            return;
+        }
+
+        imagesField.classList.remove('hidden');
+
+        var html = '';
+        checkboxes.forEach(function(cb) {
+            var label = cb.value;
+            var displayLabel = type === 'video' ? '第 ' + label + ' 集' : label;
+            var imgId = 'sel_img_' + label.replace(/[\s\u4e00-\u9fa5]/g, '_');
+            html += '<div class="selection-image-card">'
+                + '<div class="selection-image-label">' + displayLabel + '</div>'
+                + '<div class="selection-image-upload" id="' + imgId + '_wrap" onclick="document.getElementById(\'' + imgId + '_input\').click()">'
+                + '<i class="fa-solid fa-image"></i>'
+                + '<span>点击上传图片</span>'
+                + '</div>'
+                + '<input type="file" accept="image/*" id="' + imgId + '_input" class="hidden" onchange="FilmLibrary.handleImageUpload(this, \'' + imgId + '\')">'
+                + '<div class="selection-image-preview hidden" id="' + imgId + '_preview">'
+                + '<img id="' + imgId + '_img">'
+                + '<button type="button" class="selection-image-remove" onclick="FilmLibrary.removeImage(\'' + imgId + '\')">&times;</button>'
+                + '</div>'
+                + '</div>';
+        });
+        imagesContainer.innerHTML = html;
+    }
+
+    function handleImageUpload(input, imgId) {
+        var file = input.files && input.files[0];
+        if (!file) return;
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var wrap = Utils.byId(imgId + '_wrap');
+            var preview = Utils.byId(imgId + '_preview');
+            var img = Utils.byId(imgId + '_img');
+            if (wrap) wrap.classList.add('hidden');
+            if (preview) preview.classList.remove('hidden');
+            if (img) img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function removeImage(imgId) {
+        var wrap = Utils.byId(imgId + '_wrap');
+        var preview = Utils.byId(imgId + '_preview');
+        var input = Utils.byId(imgId + '_input');
+        if (wrap) wrap.classList.remove('hidden');
+        if (preview) preview.classList.add('hidden');
+        if (input) input.value = '';
     }
 
     function handleReuploadTypeChange() {
         var typeSelect = Utils.byId('filmReuploadType');
         var trailerField = Utils.byId('filmTrailerField');
         var episodeField = Utils.byId('filmEpisodeField');
-        if (!typeSelect || !trailerField || !episodeField) return;
+        var imagesField = Utils.byId('filmSelectionImages');
+        if (!typeSelect || !trailerField || !episodeField || !imagesField) return;
 
-        trailerField.classList.toggle('hidden', typeSelect.value !== 'trailer');
-        episodeField.classList.toggle('hidden', typeSelect.value !== 'video');
+        var isTrailer = typeSelect.value === 'trailer';
+        var isVideo = typeSelect.value === 'video';
+
+        trailerField.classList.toggle('hidden', !isTrailer);
+        episodeField.classList.toggle('hidden', !isVideo);
+        imagesField.classList.add('hidden');
+
+        if (isTrailer) fillTrailerOptions();
+        if (isVideo) {
+            var item = AppData.filmData[currentReuploadIdx];
+            if (item) fillEpisodeOptions(item);
+        }
+    }
+
+    function getSelectedLabels() {
+        var typeSelect = Utils.byId('filmReuploadType');
+        if (!typeSelect) return [];
+
+        var type = typeSelect.value;
+        var selector = type === 'video'
+            ? '#filmEpisodeCheckboxList .episode-checkbox:checked'
+            : type === 'trailer'
+                ? '#filmTrailerCheckboxList .trailer-checkbox:checked'
+                : '';
+        if (!selector) return [];
+
+        var checked = document.querySelectorAll(selector);
+        return Array.from(checked).map(function(cb) { return cb.value; });
     }
 
     function confirmReupload() {
         var item = AppData.filmData[currentReuploadIdx];
         var typeSelect = Utils.byId('filmReuploadType');
-        var trailerSelect = Utils.byId('filmTrailerSelect');
-        var episodeSelect = Utils.byId('filmEpisodeSelect');
         var note = Utils.byId('filmReuploadNote');
         if (!item || !typeSelect) return;
 
@@ -141,15 +294,26 @@ var FilmLibrary = (function() {
             video: '视频'
         };
         var target = typeMap[typeSelect.value];
-        var extra = '—';
-        if (typeSelect.value === 'trailer' && trailerSelect) extra = selectedText(trailerSelect);
-        if (typeSelect.value === 'video' && episodeSelect) extra = selectedText(episodeSelect);
+        var selectedLabels = getSelectedLabels();
+        var extra = selectedLabels.length > 0 ? selectedLabels.join('、') : '—';
+
+        // 收集每个选中项的图片数据
+        var selections = [];
+        selectedLabels.forEach(function(label) {
+            var imgId = 'sel_img_' + label.replace(/[\s\u4e00-\u9fa5]/g, '_');
+            var img = Utils.byId(imgId + '_img');
+            selections.push({
+                label: label,
+                imageSrc: img ? (img.src || '') : ''
+            });
+        });
 
         AppData.deliveryReuploadRequests.unshift({
             projectId: item.id,
             projectName: item.name,
             type: target,
             extra: extra,
+            selections: selections,
             note: (note && note.value.trim()) || '无',
             status: '待重新上传',
             createdAt: formatNow()
@@ -186,11 +350,6 @@ var FilmLibrary = (function() {
             + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
     }
 
-    function selectedText(select) {
-        if (!select || !select.selectedOptions || !select.selectedOptions.length) return '—';
-        return select.selectedOptions[0].textContent;
-    }
-
     function init() {
         var modal = Utils.byId('filmReuploadModal');
         if (modal) {
@@ -212,6 +371,11 @@ var FilmLibrary = (function() {
         closeReuploadModal: closeReuploadModal,
         handleReuploadTypeChange: handleReuploadTypeChange,
         confirmReupload: confirmReupload,
-        openDeliveryRequests: openDeliveryRequests
+        openDeliveryRequests: openDeliveryRequests,
+        onSelectionChange: onSelectionChange,
+        handleImageUpload: handleImageUpload,
+        removeImage: removeImage,
+        toggleEpisodeBadge: toggleEpisodeBadge,
+        toggleSelectAllEpisodes: toggleSelectAllEpisodes
     };
 })();

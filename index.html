@@ -259,6 +259,7 @@
                             <span class="panel-card__meta" id="deliveryRequestCount">暂无申请</span>
                         </div>
                         <div id="deliveryRequestEmpty" class="delivery-request-empty">成片库提交重新上传后，会在这里展示交付处理记录。</div>
+                        <div id="deliveryRequestCardGrid" class="reupload-request-grid hidden"></div>
                         <div id="deliveryRequestTableWrap" class="table-shell hidden">
                             <table class="admin-table delivery-request-table">
                                 <thead><tr><th>项目</th><th>上传内容</th><th>补充选择</th><th>详细说明</th><th>状态</th><th>提交时间</th><th>操作</th></tr></thead>
@@ -285,68 +286,39 @@
                 </section>
             </div>
 
-            <div id="workspace-canvas" class="canvas-workspace hidden">
+                        <div id="workspace-canvas" class="canvas-workspace hidden">
                 <div id="canvasToolbar" class="canvas-toolbar">
                     <div class="canvas-toolbar__left">
-                        <button onclick="backToCanvasProjects()" class="secondary-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button>
+                        <button onclick="backToCanvasProjects()" class="canvas-back-tab" title="返回项目列表"><i class="fa-solid fa-chevron-left"></i></button>
                         <span id="canvasProjectName" class="canvas-project-name"></span>
                     </div>
                     <div class="canvas-toolbar__right">
-                        <button class="secondary-btn" onclick="CanvasModule.addTextNode()">添加文本</button>
-                        <button class="secondary-btn" onclick="CanvasModule.uploadLocalImage()">上传图片</button>
-                        <button class="secondary-btn" onclick="clearCanvasWorkspace()">清空画布</button>
-                        <button class="primary-btn" onclick="generateCanvasImage()">生成图片</button>
+                        <input id="canvasSearch" class="canvas-search-input" placeholder="搜索节点/提示词" oninput="CanvasModule.searchNodes(this.value)">
+                        <button class="canvas-icon-btn" title="共享画布" onclick="CanvasModule.openSharePanel()"><i class="fa-solid fa-users"></i></button>
+                        <button class="canvas-icon-btn" title="全局设定" onclick="CanvasModule.openGlobalSettings()"><i class="fa-solid fa-sliders"></i></button>
+                        <button class="canvas-icon-btn" title="添加大框" onclick="CanvasModule.addFrameBox()"><i class="fa-regular fa-square-plus"></i></button>
+                        <button class="canvas-icon-btn" title="添加文本" onclick="CanvasModule.addTextNode()"><i class="fa-solid fa-font"></i></button>
+                        <button class="canvas-icon-btn" title="上传图片" onclick="CanvasModule.uploadLocalImage()"><i class="fa-regular fa-image"></i></button>
+                        <button class="canvas-icon-btn" title="清空画布" onclick="clearCanvasWorkspace()"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="canvas-create-btn" onclick="CanvasModule.addPromptNode()"><i class="fa-solid fa-wand-magic-sparkles"></i> 新建生成</button>
                     </div>
                 </div>
                 <div class="canvas-layout">
-                    <aside id="canvasLeftPanel" class="canvas-side">
-                        <div class="canvas-field">
-                            <div class="panel-label">基础模型</div>
-                            <select id="canvasModel" class="canvas-input"><option>LibNano（推荐）</option><option>Seedream 5.0</option><option>Midjourney V7</option><option>Niji 7</option></select>
-                        </div>
-                        <div class="canvas-field">
-                            <div class="panel-label">正面提示词</div>
-                            <textarea id="promptPositive" rows="5" class="canvas-input" placeholder="描述你想生成的画面内容"></textarea>
-                        </div>
-                        <div class="canvas-field">
-                            <div class="panel-label">负面提示词</div>
-                            <textarea id="promptNegative" rows="3" class="canvas-input" placeholder="如：模糊、变形、水印"></textarea>
-                        </div>
-                        <div class="canvas-field">
-                            <div class="panel-label">图片尺寸</div>
-                            <div class="chip-grid">
-                                <button onclick="setCanvasSize(this,'512脳512')" class="size-btn">512x512</button>
-                                <button onclick="setCanvasSize(this,'768脳768')" class="size-btn">768x768</button>
-                                <button onclick="setCanvasSize(this,'1024脳1024')" class="size-btn active">1024x1024</button>
-                                <button onclick="setCanvasSize(this,'768脳512')" class="size-btn">768x512</button>
-                                <button onclick="setCanvasSize(this,'512脳768')" class="size-btn">512x768</button>
-                            </div>
-                        </div>
-                        <div class="canvas-field">
-                            <div class="panel-label">风格</div>
-                            <div class="chip-grid">
-                                <button onclick="setCanvasStyle(this,'写实')" class="style-btn active">写实</button>
-                                <button onclick="setCanvasStyle(this,'动漫')" class="style-btn">动漫</button>
-                                <button onclick="setCanvasStyle(this,'油画')" class="style-btn">油画</button>
-                                <button onclick="setCanvasStyle(this,'古风')" class="style-btn">古风</button>
-                            </div>
-                        </div>
-                    </aside>
                     <div class="canvas-stage">
-                        <div class="canvas-stage__tips"><span>可拖拽节点、右键打开快捷菜单、滚轮缩放画布</span><span id="canvasCoord">X:0 Y:0</span></div>
                         <div id="canvasWorkspace" class="canvas-stage__board">
-                            <div id="canvasEmpty" class="canvas-empty"><div><i class="fa-regular fa-image"></i><p>从左侧填写提示词，或直接上传本地素材开始创作。</p></div></div>
+                            <div class="canvas-tool-rail">
+                                <button title="添加文本" onclick="CanvasModule.addTextNode()"><i class="fa-solid fa-font"></i><span>文本</span></button>
+                                <button title="上传图片" onclick="CanvasModule.uploadLocalImage()"><i class="fa-regular fa-image"></i><span>图片上传</span></button>
+                                <button title="添加大框" onclick="CanvasModule.addFrameBox()"><i class="fa-regular fa-square-plus"></i><span>大框</span></button>
+                            </div>
+                            <div class="canvas-stage__tips"><span>右键添加文本或图片节点，拖拽节点调整位置</span><span id="canvasCoord">X:0 Y:0</span></div>
+                            <div id="canvasEmpty" class="canvas-empty"><div><i class="fa-regular fa-image"></i><p>右键添加节点，或点击新建生成开始创作。</p></div></div>
+                            <svg id="canvasConnections" class="canvas-connections"></svg>
                             <div id="canvasCardsArea"></div>
                         </div>
                     </div>
-                    <aside id="historyBar" class="canvas-history">
-                        <div class="canvas-history__head">生成历史 <span id="historyCount">0 张</span></div>
-                        <div id="generateHistory" class="canvas-history__body"></div>
-                    </aside>
                 </div>
             </div>
-        </main>
-    </div>
 
     <div id="downloadModal" class="detail-overlay">
         <div class="dialog-card dialog-card--small">
@@ -376,12 +348,23 @@
                     <option value="asset">资产</option>
                     <option value="video">视频</option>
                 </select></label>
-                <label id="filmTrailerField" class="field hidden"><span>选择预告片</span><select id="filmTrailerSelect">
-                    <option>预告片 1</option>
-                    <option>预告片 2</option>
-                    <option>预告片 3</option>
-                </select></label>
-                <label id="filmEpisodeField" class="field hidden"><span>选择视频集数</span><select id="filmEpisodeSelect"></select></label>
+                <label id="filmTrailerField" class="field hidden">
+                    <span>选择预告片（可多选）</span>
+                    <div id="filmTrailerCheckboxList" class="checkbox-grid"></div>
+                </label>
+                <div id="filmEpisodeField" class="field hidden film-episode-panel">
+                    <div class="episode-panel-toolbar">
+                        <span class="episode-panel-title">选择视频集数（可多选）</span>
+                        <span class="episode-panel-divider">|</span>
+                        <span class="episode-panel-count" id="filmEpisodeCount">已选 0 集</span>
+                        <button type="button" class="episode-select-all" id="filmEpisodeSelectAll" onclick="FilmLibrary.toggleSelectAllEpisodes()">全选</button>
+                    </div>
+                    <div id="filmEpisodeCheckboxList" class="episode-badge-grid"></div>
+                </div>
+                <div id="filmSelectionImages" class="field hidden">
+                    <span>对应剧集图片上传</span>
+                    <div id="filmSelectionImagesContainer" class="selection-images-grid"></div>
+                </div>
                 <label class="field film-reupload-note"><span>详细说明</span><textarea id="filmReuploadNote" placeholder="请填写重新上传原因、修改范围或需要交互中心注意的事项"></textarea></label>
                 <div class="film-reupload-target">
                     <i class="fa-solid fa-arrow-up-from-bracket"></i>

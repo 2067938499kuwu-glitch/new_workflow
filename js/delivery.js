@@ -5,77 +5,94 @@ var DeliveryModule = (function() {
     function render() {
         var tbody = Utils.byId('deliveryTableBody');
         if (!tbody) return;
-        normalizeDeliveryPage();
 
-        var paginationTotal = Utils.byId('deliveryPaginationTotal');
-        if (paginationTotal) paginationTotal.textContent = '共 ' + AppData.deliveryData.length + ' 条';
-
-        tbody.innerHTML = AppData.deliveryData.map(function(item, idx) {
+        tbody.innerHTML = AppData.deliveryData.map(function(item) {
             return '<tr>'
-                + '<td>' + Utils.escapeHtml(item.name) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.episodes) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.category) + '</td>'
-                + '<td><span class="delivery-status ' + Utils.escapeHtml(item.statusClass) + '">' + Utils.escapeHtml(item.status) + '</span></td>'
-                + '<td>' + Utils.escapeHtml(item.deadline) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.pending) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.rejected) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.approved) + '</td>'
-                + '<td><div class="delivery-action-group">'
-                + '<button class="delivery-action-upload" onclick="DeliveryModule.showUploadModal()">上传</button>'
-                + '<button class="delivery-action-review" onclick="DeliveryModule.showDetailModal(\'' + Utils.escapeHtml(item.name) + '\')">审核</button>'
-                + '<button class="delivery-action-history" onclick="DeliveryModule.showHistoryModal(' + idx + ')">历史记录</button>'
+                + '<td><span class="table-title">' + Utils.escapeHtml(item.name) + '</span></td>'
+                + '<td><span class="table-number table-muted">' + Utils.escapeHtml(item.episodes) + '</span></td>'
+                + '<td><span class="table-pill table-pill-category">' + Utils.escapeHtml(item.category) + '</span></td>'
+                + '<td><span class="tag ' + Utils.escapeHtml(item.statusClass) + '">' + Utils.escapeHtml(item.status) + '</span></td>'
+                + '<td class="table-muted">' + Utils.escapeHtml(item.deadline) + '</td>'
+                + '<td><span class="table-number">' + Utils.escapeHtml(item.pending) + '</span></td>'
+                + '<td><span class="table-number">' + Utils.escapeHtml(item.rejected) + '</span></td>'
+                + '<td><span class="table-number">' + Utils.escapeHtml(item.approved) + '</span></td>'
+                + '<td><div class="table-action-group">'
+                + '<button class="table-action-link is-warn" onclick="DeliveryModule.showUploadModal()">上传</button>'
+                + '<button class="table-action-link is-accent" onclick="DeliveryModule.showDetailModal(\'' + Utils.escapeHtml(item.name) + '\')">审核</button>'
                 + '</div></td>'
                 + '</tr>';
         }).join('');
         renderReuploadRequests();
     }
 
-    function normalizeDeliveryPage() {
-        var filter = Utils.qs('#view-delivery .filter-grid');
-        if (filter && filter.dataset.normalized !== '1') {
-            filter.dataset.normalized = '1';
-            filter.innerHTML = '<label class="field"><span>项目名称</span><input type="text" placeholder="请输入项目名称"></label>'
-                + '<label class="field delivery-date-field"><span>时间</span><input type="text" placeholder="开始时间"><em>-</em><input type="text" placeholder="结束时间"></label>'
-                + '<div class="field field--actions"><button class="primary-btn">搜索</button><button class="secondary-btn">重置</button></div>';
-        }
-
-        var headRow = Utils.qs('#deliveryTableBody');
-        var table = headRow && headRow.closest('table');
-        var theadRow = table && table.querySelector('thead tr');
-        if (theadRow) {
-            theadRow.innerHTML = '<th>项目名称</th><th>项目总剧集</th><th>项目分类</th><th>项目状态</th><th>项目截止时间</th><th>待审核数量</th><th>驳回数量</th><th>已通过数量</th><th>操作</th>';
-        }
-    }
-
     function renderReuploadRequests() {
         var body = Utils.byId('deliveryRequestBody');
         var empty = Utils.byId('deliveryRequestEmpty');
         var tableWrap = Utils.byId('deliveryRequestTableWrap');
+        var cardGrid = Utils.byId('deliveryRequestCardGrid');
         var count = Utils.byId('deliveryRequestCount');
-        var card = Utils.byId('deliveryReuploadRequests');
-        if (!body || !empty || !tableWrap) return;
+        if (!body || !empty || !tableWrap || !cardGrid) return;
 
         var requests = AppData.deliveryReuploadRequests || [];
         var total = requests.length;
-        if (card) card.classList.toggle('hidden', total === 0);
         if (count) count.textContent = total ? '共 ' + total + ' 条申请' : '暂无申请';
         empty.classList.toggle('hidden', total > 0);
-        tableWrap.classList.toggle('hidden', total === 0);
 
-        body.innerHTML = requests.map(function(item, idx) {
-            return '<tr>'
-                + '<td><span class="table-title">' + Utils.escapeHtml(item.projectName) + '</span><div class="table-muted">' + Utils.escapeHtml(item.projectId) + '</div></td>'
-                + '<td>' + Utils.escapeHtml(item.type) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.extra) + '</td>'
-                + '<td class="delivery-request-note">' + Utils.escapeHtml(item.note) + '</td>'
-                + '<td><span class="tag tag-orange">' + Utils.escapeHtml(item.status) + '</span></td>'
-                + '<td class="table-muted">' + Utils.escapeHtml(item.createdAt) + '</td>'
-                + '<td><div class="table-action-group">'
-                + '<button class="table-action-link is-warn" onclick="DeliveryModule.handleReuploadRequest(' + idx + ')">去上传</button>'
-                + '<button class="table-action-link is-accent" onclick="DeliveryModule.handleReuploadReview(' + idx + ')">审核</button>'
-                + '</div></td>'
-                + '</tr>';
+        // 渲染卡片视图
+        cardGrid.innerHTML = requests.map(function(item, idx) {
+            var hasSelections = item.selections && item.selections.length > 0;
+            var typeIcon = '';
+            switch (item.type) {
+                case '视频': typeIcon = 'fa-video'; break;
+                case '预告片': typeIcon = 'fa-film'; break;
+                case '分集图片': typeIcon = 'fa-images'; break;
+                case '封面': typeIcon = 'fa-image'; break;
+                case '资产': typeIcon = 'fa-box'; break;
+                default: typeIcon = 'fa-file'; break;
+            }
+
+            var selectionsHtml = '';
+            if (hasSelections) {
+                selectionsHtml = '<div class="req-card-selections">';
+                item.selections.forEach(function(sel) {
+                    selectionsHtml += '<div class="req-card-selection-item">'
+                        + '<span class="req-card-selection-label">' + Utils.escapeHtml(sel.label) + '</span>';
+                    if (sel.imageSrc) {
+                        selectionsHtml += '<div class="req-card-selection-img"><img src="' + sel.imageSrc + '" alt=""></div>';
+                    } else {
+                        selectionsHtml += '<div class="req-card-selection-placeholder"><i class="fa-regular fa-image"></i></div>';
+                    }
+                    selectionsHtml += '</div>';
+                });
+                selectionsHtml += '</div>';
+            } else {
+                selectionsHtml = '<span class="table-muted">' + Utils.escapeHtml(item.extra) + '</span>';
+            }
+
+            return '<div class="reupload-request-card">'
+                + '<div class="req-card-header">'
+                +   '<div class="req-card-type"><i class="fa-solid ' + typeIcon + '"></i> ' + Utils.escapeHtml(item.type) + '</div>'
+                +   '<span class="tag tag-orange">' + Utils.escapeHtml(item.status) + '</span>'
+                + '</div>'
+                + '<div class="req-card-body">'
+                +   '<div class="req-card-project"><strong>' + Utils.escapeHtml(item.projectName) + '</strong><small>' + Utils.escapeHtml(item.projectId) + '</small></div>'
+                +   selectionsHtml
+                +   '<div class="req-card-note">' + Utils.escapeHtml(item.note) + '</div>'
+                + '</div>'
+                + '<div class="req-card-footer">'
+                +   '<span class="req-card-time"><i class="fa-regular fa-clock"></i> ' + Utils.escapeHtml(item.createdAt) + '</span>'
+                +   '<div class="table-action-group">'
+                +     '<button class="table-action-link is-warn" onclick="DeliveryModule.handleReuploadRequest(' + idx + ')">去上传</button>'
+                +     '<button class="table-action-link is-accent" onclick="DeliveryModule.handleReuploadReview(' + idx + ')">审核</button>'
+                +   '</div>'
+                + '</div>'
+                + '</div>';
         }).join('');
+        cardGrid.classList.toggle('hidden', total === 0);
+
+        // 表格式兼容旧数据（无图片的简单请求）
+        tableWrap.classList.add('hidden');
+        body.innerHTML = '';
     }
 
     function handleReuploadRequest(idx) {
@@ -98,29 +115,7 @@ var DeliveryModule = (function() {
     function handleReuploadReview(idx) {
         var request = (AppData.deliveryReuploadRequests || [])[idx];
         if (!request) return;
-        showDetailModal(request.projectName);
-    }
-
-    function showHistoryModal() {
-        var modal = Utils.byId('deliveryHistoryModal');
-        var body = Utils.byId('deliveryHistoryBody');
-        if (!modal || !body) return;
-
-        body.innerHTML = AppData.deliveryHistoryData.map(function(item) {
-            return '<tr>'
-                + '<td>' + Utils.escapeHtml(item.action) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.type) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.operator) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.time) + '</td>'
-                + '<td>' + Utils.escapeHtml(item.remark) + '</td>'
-                + '</tr>';
-        }).join('');
-        modal.classList.add('is-visible');
-    }
-
-    function closeHistoryModal() {
-        var modal = Utils.byId('deliveryHistoryModal');
-        if (modal) modal.classList.remove('is-visible');
+        DeliveryModule.showDetailModal(request.projectName);
     }
 
     function initUploadTabs() {
@@ -163,14 +158,16 @@ var DeliveryModule = (function() {
         }
         btn.classList.add('active');
 
-        if (!uploadTitles || !uploadPanels) return;
+        var allTitles = uploadTitles;
+        var allPanels = uploadPanels;
+        if (!allTitles || !allPanels) return;
 
-        uploadTitles.forEach(function(title) {
+        allTitles.forEach(function(title) {
             var panel = title.nextElementSibling;
             var titleType = title.getAttribute('data-section-title') || (panel && panel.getAttribute('data-content'));
             title.classList.toggle('hidden', titleType !== type);
         });
-        uploadPanels.forEach(function(panel) {
+        allPanels.forEach(function(panel) {
             panel.classList.toggle('hidden', panel.getAttribute('data-content') !== type);
         });
     }
@@ -217,20 +214,11 @@ var DeliveryModule = (function() {
         });
     }
 
-    function initHistoryModal() {
-        var modal = Utils.byId('deliveryHistoryModal');
-        if (!modal) return;
-        modal.addEventListener('click', function(event) {
-            if (event.target === modal) closeHistoryModal();
-        });
-    }
-
     function init() {
         initUploadTabs();
         initUploadSidebarTabs();
         initDetailModal();
         initUploadModal();
-        initHistoryModal();
     }
 
     init();
@@ -243,8 +231,6 @@ var DeliveryModule = (function() {
         switchSidebarTab: switchSidebarTab,
         renderReuploadRequests: renderReuploadRequests,
         handleReuploadRequest: handleReuploadRequest,
-        handleReuploadReview: handleReuploadReview,
-        showHistoryModal: showHistoryModal,
-        closeHistoryModal: closeHistoryModal
+        handleReuploadReview: handleReuploadReview
     };
 })();
