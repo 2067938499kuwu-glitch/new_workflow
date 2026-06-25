@@ -252,37 +252,24 @@
                             <div class="field field--actions"><button class="primary-btn">搜索</button><button class="secondary-btn">重置</button></div>
                         </div>
                     </div>
-                    <!-- 重新上传申请放在列表上方 -->
-                    <div id="deliveryReuploadRequests" class="panel-card delivery-request-card">
-                        <div class="panel-card__header">
-                            <h3>重新上传申请</h3>
-                            <span class="panel-card__meta" id="deliveryRequestCount">暂无申请</span>
-                        </div>
-                        <div id="deliveryRequestEmpty" class="delivery-request-empty">成片库提交重新上传后，会在这里展示交付处理记录。</div>
-                        <div id="deliveryRequestCardGrid" class="reupload-request-grid hidden"></div>
-                        <div id="deliveryRequestTableWrap" class="table-shell hidden">
-                            <table class="admin-table delivery-request-table">
-                                <thead><tr><th>项目</th><th>上传内容</th><th>补充选择</th><th>详细说明</th><th>状态</th><th>提交时间</th><th>操作</th></tr></thead>
-                                <tbody id="deliveryRequestBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
                     <div class="panel-card">
                         <div class="panel-card__header"><h3>交付项目列表</h3></div>
-                        <div class="table-shell">
-                            <table class="admin-table">
-                                <thead><tr><th>项目名称</th><th>总集数</th><th>题材</th><th>状态</th><th>计划完成</th><th>待审数量</th><th>驳回数量</th><th>通过数量</th><th>操作</th></tr></thead>
+                        <div class="film-table-wrap">
+                            <table class="film-table-visual">
+                                <thead><tr><th>项目名称</th><th>总集数</th><th>题材</th><th>分类</th><th>详细说明</th><th>状态</th><th>项目截至日期</th><th>待审数量</th><th>驳回数量</th><th>通过数量</th><th>操作</th></tr></thead>
                                 <tbody id="deliveryTableBody"></tbody>
                             </table>
                         </div>
+                        <div class="film-pagination">
+                            <span id="deliveryPaginationTotal">共 0 条</span>
+                            <select><option>10条/页</option></select>
+                            <button class="film-page-arrow disabled"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button class="film-page-number active">1</button>
+                            <button class="film-page-arrow"><i class="fa-solid fa-chevron-right"></i></button>
+                            <span>前往</span><input value="1"><span>页</span>
+                        </div>
                     </div>
-                    <div class="delivery-pagination">
-                        <span id="deliveryPaginationTotal">共 0 条</span>
-                        <select><option>10条/页</option></select>
-                        <button class="delivery-page-btn">上一页</button>
-                        <button class="delivery-page-number active">1</button>
-                        <button class="delivery-page-btn">下一页</button>
-                    </div>
+                    <!-- 重新上传申请放在列表上方 -->
                 </section>
             </div>
 
@@ -336,42 +323,20 @@
             <div class="dialog-card__header">
                 <div>
                     <h3>交互中心重新上传</h3>
-                    <p id="filmReuploadProject">请选择需要重新提交的内容</p>
+                    <p id="filmReuploadProject">请填写修改说明并上传相关图片</p>
                 </div>
                 <button class="detail-close" onclick="FilmLibrary.closeReuploadModal()">&times;</button>
             </div>
             <div class="film-reupload-body">
-                <label class="field"><span>重新上传内容</span><select id="filmReuploadType" onchange="FilmLibrary.handleReuploadTypeChange()">
-                    <option value="image">分集图片</option>
-                    <option value="cover">封面</option>
-                    <option value="trailer">预告片</option>
-                    <option value="asset">资产</option>
-                    <option value="video">视频</option>
-                </select></label>
-                <label id="filmTrailerField" class="field hidden">
-                    <span>选择预告片（可多选）</span>
-                    <div id="filmTrailerCheckboxList" class="checkbox-grid"></div>
-                </label>
-                <div id="filmEpisodeField" class="field hidden film-episode-panel">
-                    <div class="episode-panel-toolbar">
-                        <span class="episode-panel-title">选择视频集数（可多选）</span>
-                        <span class="episode-panel-divider">|</span>
-                        <span class="episode-panel-count" id="filmEpisodeCount">已选 0 集</span>
-                        <button type="button" class="episode-select-all" id="filmEpisodeSelectAll" onclick="FilmLibrary.toggleSelectAllEpisodes()">全选</button>
-                    </div>
-                    <div id="filmEpisodeCheckboxList" class="episode-badge-grid"></div>
-                </div>
-                <div id="filmSelectionImages" class="field hidden">
-                    <span>对应剧集图片上传</span>
-                    <div id="filmSelectionImagesContainer" class="selection-images-grid"></div>
-                </div>
-                <label class="field film-reupload-note"><span>详细说明</span><textarea id="filmReuploadNote" placeholder="请填写重新上传原因、修改范围或需要交互中心注意的事项"></textarea></label>
+                <label class="field film-reupload-note"><span>修改说明</span><textarea id="filmReuploadNote" placeholder="请填写修改原因、范围或需要交付中心注意的事项"></textarea></label>
                 <div class="film-reupload-target">
-                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                    <div>
-                        <strong>提交后进入交互中心</strong>
-                        <span>交互中心将按所选内容类型发起对应的重新上传流程。</span>
+                    <div class="batch-upload-area" id="filmBatchUploadArea" onclick="document.getElementById('filmBatchInput').click()">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <strong>点击或拖拽上传图片，支持多图</strong>
+                        <span>可批量上传 JPG、PNG、WebP 格式图片</span>
+                        <input type="file" accept="image/*" multiple id="filmBatchInput" class="hidden" onchange="FilmLibrary.handleBatchUpload(this)">
                     </div>
+                    <div id="filmBatchPreview" class="batch-preview-grid hidden"></div>
                 </div>
             </div>
             <div class="detail-footer">

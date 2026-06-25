@@ -2499,9 +2499,7 @@ body,
 }
 
 .film-reupload-note,
-.film-reupload-target,
-#filmSelectionImages,
-.film-episode-panel {
+.film-reupload-target {
     grid-column: 1 / -1;
 }
 
@@ -2515,9 +2513,9 @@ body,
 
 .film-reupload-target {
     display: flex;
+    flex-direction: column;
     gap: 12px;
-    align-items: center;
-    padding: 14px;
+    padding: 16px;
     border: 1px solid #dbeafe;
     border-radius: 8px;
     background: #f0f7ff;
@@ -2538,10 +2536,142 @@ body,
     display: block;
 }
 
+.film-reupload-target strong {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #1e40af;
+}
+
 .film-reupload-target span {
-    margin-top: 3px;
-    color: #64748b;
+    margin-top: 4px;
     font-size: 13px;
+    color: #64748b;
+}
+
+/* 批量上传区域 */
+.batch-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 20px;
+    border: 2px dashed #b7c9f2;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    background: #ffffff;
+}
+
+.batch-upload-area:hover {
+    border-color: #2f80ff;
+    background: #eff6ff;
+}
+
+.batch-upload-area i {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #2f80ff;
+    font-size: 22px;
+}
+
+.batch-upload-area strong {
+    margin-top: 0;
+    font-size: 15px;
+    color: #1f2937;
+}
+
+.batch-upload-area span {
+    font-size: 13px;
+    color: #8a94a6;
+}
+
+/* 批量预览网格 */
+.batch-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.batch-preview-item {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.batch-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.batch-preview-remove {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.55);
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.15s;
+}
+
+.batch-preview-remove:hover {
+    background: rgba(220,38,38,0.85);
+}
+
+.film-reupload-target:has(.batch-preview-grid:not(.hidden)) {
+    background: #f8faff;
+    border-color: #bfdbfe;
+}
+
+.film-reupload-dialog .dialog-card__header {
+    min-height: 88px;
+}
+
+.film-reupload-body textarea {
+    min-height: 98px;
+    border-color: #e5edf7;
+}
+
+.film-reupload-target {
+    min-height: 136px;
+    justify-content: center;
+    border-color: #c9d1dc;
+    background: #ffffff;
+}
+
+.film-reupload-target i {
+    display: none;
+}
+
+.film-reupload-target strong {
+    text-align: center;
+    color: #2f3643;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.film-reupload-target span {
+    display: none;
 }
 
 .film-interaction-center {
@@ -2659,6 +2789,178 @@ body,
     max-width: 360px;
     color: #4b5563;
     line-height: 1.5;
+}
+
+.delivery-row-has-suggestion td {
+    background: #fff1f1 !important;
+    color: #7f1d1d;
+}
+
+/* 交付表格最后列操作按钮居中 */
+.film-table-visual td:last-child .table-action-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    white-space: nowrap;
+}
+
+/* 交付数字列居中 */
+.film-table-visual td:nth-child(8),
+.film-table-visual td:nth-child(9),
+.film-table-visual td:nth-child(10),
+.film-table-visual th:nth-child(8),
+.film-table-visual th:nth-child(9),
+.film-table-visual th:nth-child(10) {
+    text-align: center;
+}
+
+.delivery-row-has-suggestion .table-title {
+    color: #b42318;
+}
+
+.delivery-suggestion-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 9px;
+    border-radius: 4px;
+    background: #fee2e2;
+    color: #b42318;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.delivery-suggestion-summary {
+    max-width: 260px;
+    overflow: hidden;
+    color: #b42318;
+    line-height: 1.45;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.delivery-status-suggestion {
+    background: #fee2e2;
+    color: #b42318;
+    border: 1px solid #fecaca;
+}
+
+.table-action-link.is-danger {
+    color: #d92d20;
+}
+
+.delivery-suggestion-dialog {
+    width: min(720px, calc(100vw - 48px));
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(9, 17, 31, 0.22);
+}
+
+.delivery-suggestion-dialog .dialog-card__header p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.delivery-suggestion-body {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 20px 24px;
+    overflow-y: auto;
+}
+
+.delivery-suggestion-info {
+    padding: 12px;
+    border: 1px solid #e5eaf2;
+    border-radius: 6px;
+    background: #f8fafc;
+}
+
+.delivery-suggestion-info span,
+.delivery-suggestion-note span {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.delivery-suggestion-info strong {
+    display: block;
+    margin-top: 6px;
+    color: #111827;
+    font-size: 14px;
+}
+
+.delivery-suggestion-note,
+.delivery-suggestion-images {
+    grid-column: 1 / -1;
+}
+
+.delivery-suggestion-note textarea {
+    width: 100%;
+    min-height: 130px;
+    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid #e5eaf2;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #111827;
+    resize: vertical;
+}
+
+.delivery-suggestion-image-title {
+    margin-bottom: 10px;
+    color: #111827;
+    font-weight: 700;
+}
+
+.delivery-suggestion-image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.delivery-suggestion-image-item {
+    overflow: hidden;
+    border: 1px solid #e5eaf2;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.delivery-suggestion-image-item strong {
+    display: block;
+    padding: 8px 10px;
+    color: #111827;
+    font-size: 13px;
+}
+
+.delivery-suggestion-image-item div {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    background: #f8fafc;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.delivery-suggestion-image-item img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+}
+
+.delivery-suggestion-empty {
+    min-height: 86px;
+    display: grid;
+    place-items: center;
+    border: 1px dashed #dbe3ee;
+    border-radius: 6px;
+    background: #f8fafc;
+    color: #94a3b8;
 }
 
 /* 重新上传申请卡片网格 */
@@ -2861,207 +3163,6 @@ body,
     border-color: #2f80ff;
     background: #eff6ff;
     color: #1d4ed8;
-}
-
-/* 视频集数选择面板 */
-.film-episode-panel {
-    border: 1px solid var(--line, #d1d5db);
-    border-radius: 8px;
-    background: #fafbfc;
-    overflow: hidden;
-}
-
-.episode-panel-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    background: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.episode-panel-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #374151;
-}
-
-.episode-panel-divider {
-    color: #d1d5db;
-    font-size: 14px;
-}
-
-.episode-panel-count {
-    font-size: 13px;
-    color: #6b7280;
-}
-
-.episode-panel-count.has-selection {
-    color: #2f80ff;
-    font-weight: 600;
-}
-
-.episode-select-all {
-    margin-left: auto;
-    padding: 4px 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 5px;
-    background: #ffffff;
-    color: #374151;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-}
-
-.episode-select-all:hover {
-    border-color: #2f80ff;
-    color: #2f80ff;
-    background: #f0f7ff;
-}
-
-.episode-select-all.is-all {
-    border-color: #ef7d1a;
-    color: #ef7d1a;
-    background: #fff7ed;
-}
-
-/* 剧集徽章网格 */
-.episode-badge-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 12px;
-    max-height: 216px;
-    overflow-y: auto;
-}
-
-.episode-badge-grid::-webkit-scrollbar {
-    width: 5px;
-}
-
-.episode-badge-grid::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 4px;
-}
-
-.episode-badge {
-    display: inline-grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-    color: #4b5563;
-    background: #ffffff;
-    transition: all 0.12s ease;
-    user-select: none;
-}
-
-.episode-badge:hover {
-    border-color: #2f80ff;
-    background: #f0f7ff;
-    color: #2f80ff;
-    transform: scale(1.05);
-    box-shadow: 0 1px 3px rgba(79,128,255,0.15);
-}
-
-.episode-badge input[type="checkbox"] {
-    display: none;
-}
-
-.episode-badge.is-active {
-    border-color: #2f80ff;
-    background: #2f80ff;
-    color: #ffffff;
-    box-shadow: 0 2px 6px rgba(79,128,255,0.3);
-}
-
-/* 剧集图片上传区域 */
-.selection-images-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
-    margin-top: 8px;
-}
-
-.selection-image-card {
-    border: 1px solid var(--line, #d1d5db);
-    border-radius: 8px;
-    overflow: hidden;
-    background: #fafafa;
-}
-
-.selection-image-label {
-    padding: 6px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #374151;
-    background: #f3f4f6;
-    border-bottom: 1px solid var(--line, #d1d5db);
-    text-align: center;
-}
-
-.selection-image-upload {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 24px 12px;
-    cursor: pointer;
-    color: #8a94a6;
-    transition: all 0.15s ease;
-    min-height: 120px;
-}
-
-.selection-image-upload:hover {
-    background: #f0f7ff;
-    color: #2f80ff;
-}
-
-.selection-image-upload i {
-    font-size: 28px;
-}
-
-.selection-image-upload span {
-    font-size: 12px;
-}
-
-.selection-image-preview {
-    position: relative;
-    min-height: 120px;
-}
-
-.selection-image-preview img {
-    display: block;
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-}
-
-.selection-image-remove {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(0,0,0,0.55);
-    color: #ffffff;
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    transition: background 0.15s;
-}
-
-.selection-image-remove:hover {
-    background: rgba(220,38,38,0.85);
 }
 
 /* 图片生成 - 画布创作页 */
