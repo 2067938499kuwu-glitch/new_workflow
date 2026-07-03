@@ -369,16 +369,117 @@
         </div>
     </div>
 
+    <div id="deliveryFrameConfigPopover" class="delivery-frame-config-popover hidden">
+        <div class="delivery-frame-config-card">
+            <div class="delivery-frame-config-title">提帧配置</div>
+            <div class="delivery-frame-config-desc">设置完成后将用于后续提帧处理。</div>
+            <label class="delivery-frame-config-field">
+                <span>比例</span>
+                <select id="deliveryFrameRatio">
+                    <option value="1920（宽屏）">1920（宽屏）</option>
+                    <option value="1080（竖屏）">1080（竖屏）</option>
+                    <option value="1080（方屏）">1080（方屏）</option>
+                </select>
+            </label>
+            <label class="delivery-frame-config-field">
+                <span>帧率</span>
+                <select id="deliveryFrameFps">
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="60">60</option>
+                </select>
+            </label>
+            <button type="button" class="primary-btn delivery-frame-config-confirm" id="deliveryFrameConfigConfirmBtn">确认配置</button>
+        </div>
+    </div>
+
     <div id="detailModal" class="detail-overlay">
-        <div class="detail-modal">
-            <div class="detail-topbar"><h3 class="detail-title">交付详情</h3><button id="closeDetail" class="detail-close">&times;</button></div>
-            <div class="detail-body detail-body--column">
-                <div class="detail-summary-grid">
-                    <div class="summary-card"><span>待审批次</span><strong>3</strong></div>
-                    <div class="summary-card"><span>已通过</span><strong>6</strong></div>
-                    <div class="summary-card"><span>被驳回</span><strong>1</strong></div>
+        <div class="delivery-review-modal">
+            <div class="delivery-review-header">
+                <div class="delivery-review-heading">
+                    <div class="delivery-review-title-row">
+                        <h3 class="delivery-review-title" id="deliveryReviewProjectTitle">项目名称</h3>
+                        <button type="button" class="delivery-review-expand-btn" aria-label="全屏预览">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="delivery-review-episodes">
+                        <span class="delivery-review-episodes-label">集数:</span>
+                        <div class="delivery-review-episode-tabs" id="deliveryReviewEpisodeTabs"></div>
+                    </div>
                 </div>
-                <div class="panel-card panel-card--inner"><div class="panel-card__header"><h3>当前审核说明</h3></div><p class="detail-copy">统一在一个弹窗内查看当前交付状态、素材批次和审核说明。</p></div>
+                <div class="delivery-review-header-tools">
+                    <select id="deliveryReviewEpisodeRange" class="delivery-review-range-select">
+                        <option value="1-3集">1-3集</option>
+                    </select>
+                    <div class="delivery-review-status-pills">
+                        <span class="delivery-review-status-pill">当前集数：<em id="deliveryReviewCurrentEpisode">第1集</em></span>
+                        <span class="delivery-review-status-pill is-highlight" id="deliveryReviewStatusText">审核中</span>
+                    </div>
+                    <button id="closeDetail" class="detail-close">&times;</button>
+                </div>
+            </div>
+            <div class="delivery-review-layout">
+                <section class="delivery-review-stage">
+                    <div class="delivery-review-inline-notice hidden" id="deliveryReviewFrameNotice">
+                        <div class="delivery-review-inline-notice__content">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span id="deliveryReviewFrameNoticeText">当前项目尚未完成提帧配置，建议先配置后再执行全部通过。</span>
+                        </div>
+                        <button type="button" class="delivery-review-link-btn" id="deliveryReviewConfigBtn" data-frame-config-trigger="review">去配置</button>
+                    </div>
+                    <div class="delivery-review-feedback hidden" id="deliveryReviewFeedback"></div>
+                    <div class="delivery-review-player-card">
+                        <div class="delivery-review-preview">
+                            <div class="delivery-review-preview-scene">
+                                <div class="delivery-review-scene-glow"></div>
+                                <div class="delivery-review-scene-road"></div>
+                                <div class="delivery-review-scene-bus"></div>
+                                <div class="delivery-review-scene-runner"></div>
+                                <div class="delivery-review-annotation-box"></div>
+                            </div>
+                        </div>
+                        <div class="delivery-review-player-controls">
+                            <button type="button" class="delivery-review-play-btn" aria-label="播放">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                            <div class="delivery-review-timeline">
+                                <div class="delivery-review-timeline-track"></div>
+                                <div class="delivery-review-timeline-thumb"></div>
+                            </div>
+                            <div class="delivery-review-timecode">00:01 / 00:05</div>
+                        </div>
+                        <div class="delivery-review-toolbar">
+                            <div class="delivery-review-toolbar-left">
+                                <button type="button" class="delivery-review-tool is-active">框选</button>
+                                <button type="button" class="delivery-review-tool">画笔</button>
+                                <select class="delivery-review-tool-select">
+                                    <option value="中">中</option>
+                                    <option value="细">细</option>
+                                    <option value="粗">粗</option>
+                                </select>
+                                <span class="delivery-review-color-chip"></span>
+                            </div>
+                            <div class="delivery-review-toolbar-right">
+                                <button type="button" class="delivery-review-tool-link">撤回</button>
+                                <button type="button" class="delivery-review-tool-link">清空</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <aside class="delivery-review-comments-panel">
+                    <div class="delivery-review-comments-header">
+                        <span class="delivery-review-comments-indicator"></span>
+                        <h4>本集审核内容</h4>
+                    </div>
+                    <div class="delivery-review-type-panels" id="deliveryReviewTypePanels"></div>
+                </aside>
+            </div>
+            <div class="delivery-review-footer">
+                <button type="button" class="secondary-btn delivery-review-reject-btn" id="deliveryReviewRejectBtn">驳回</button>
+                <button type="button" class="primary-btn delivery-review-approve-btn" id="deliveryReviewApproveBtn">全部通过</button>
             </div>
         </div>
     </div>

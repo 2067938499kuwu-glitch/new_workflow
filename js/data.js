@@ -61,14 +61,14 @@ var AppData = (function() {
     ];
 
     var deliveryData = [
-        { name: '挖果树', episodes: '0', category: '—', status: '待审核', statusClass: 'delivery-status-pending', deadline: '—', pending: 0, rejected: 0, approved: 0 },
-        { name: '韭卓', episodes: '0', category: '—', status: '待审核', statusClass: 'delivery-status-pending', deadline: '—', pending: 0, rejected: 0, approved: 0 },
-        { name: '新引擎', episodes: '0', category: '—', status: '待上传', statusClass: 'delivery-status-upload', deadline: '—', pending: 0, rejected: 0, approved: 0 },
-        { name: '测试1', episodes: '0', category: '—', status: '已完成', statusClass: 'delivery-status-done', deadline: '—', pending: 0, rejected: 0, approved: 0 },
-        { name: 'ztest', episodes: '0', category: '—', status: '待上传', statusClass: 'delivery-status-upload', deadline: '—', pending: 0, rejected: 0, approved: 0 },
-        { name: '《政企部门》', episodes: '4', category: '—', status: '已完成', statusClass: 'delivery-status-done', deadline: '—', pending: 4, rejected: 4, approved: 0 },
-        { name: '《三江学院》', episodes: '4', category: '—', status: '审核驳回', statusClass: 'delivery-status-reject', deadline: '—', pending: 4, rejected: 4, approved: 0 },
-        { name: '测试引擎1', episodes: '7', category: '—', status: '待审核', statusClass: 'delivery-status-pending', deadline: '—', pending: 2, rejected: 0, approved: 2 }
+        { name: '挖果树', episodes: '0', category: '—', status: '待审核', statusClass: 'delivery-status-pending', deadline: '—', pending: 0, rejected: 0, approved: 0, frameConfigConfigured: false, frameConfig: { ratio: '1920（宽屏）', fps: '30' } },
+        { name: '韭卓', episodes: '0', category: '—', status: '待审核', statusClass: 'delivery-status-pending', deadline: '—', pending: 0, rejected: 0, approved: 0, frameConfigConfigured: false, frameConfig: { ratio: '1920（宽屏）', fps: '24' } },
+        { name: '新引擎', episodes: '0', category: '—', status: '待上传', statusClass: 'delivery-status-upload', deadline: '—', pending: 0, rejected: 0, approved: 0, frameConfigConfigured: false, frameConfig: { ratio: '1080（方屏）', fps: '30' } },
+        { name: '测试1', episodes: '0', category: '—', status: '已完成', statusClass: 'delivery-status-done', deadline: '—', pending: 0, rejected: 0, approved: 0, frameConfigConfigured: true, frameConfig: { ratio: '1920（宽屏）', fps: '30' } },
+        { name: 'ztest', episodes: '0', category: '—', status: '待上传', statusClass: 'delivery-status-upload', deadline: '—', pending: 0, rejected: 0, approved: 0, frameConfigConfigured: false, frameConfig: { ratio: '1920（宽屏）', fps: '25' } },
+        { name: '《政企部门》', episodes: '4', category: '—', status: '已完成', statusClass: 'delivery-status-done', deadline: '—', pending: 4, rejected: 4, approved: 0, frameConfigConfigured: true, frameConfig: { ratio: '1920（宽屏）', fps: '30' } },
+        { name: '《三江学院》', episodes: '4', category: '—', status: '审核驳回', statusClass: 'delivery-status-reject', deadline: '—', pending: 4, rejected: 4, approved: 0, frameConfigConfigured: true, frameConfig: { ratio: '1920（宽屏）', fps: '24' } },
+        { name: '测试引擎1', episodes: '7', category: '—', status: '待审核', statusClass: 'delivery-status-pending', deadline: '—', pending: 2, rejected: 0, approved: 2, frameConfigConfigured: false, frameConfig: { ratio: '1080（方屏）', fps: '30' } }
     ];
 
     var deliveryHistoryData = [
