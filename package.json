@@ -1,18 +1,9 @@
 {
-  "name": "aigc-management-platform",
-  "version": "1.0.0",
-  "description": "AIGC管理后台 - 集成交付中心、成片库、画布、上传文件等功能模块",
-  "main": "index.html",
+  "name": "manying-aigc-admin-replica",
+  "version": "2.0.0",
+  "private": true,
+  "description": "漫影工坊 AIGC 管理后台前端复刻",
   "scripts": {
-    "dev": "python -m http.server 8080"
-  },
-  "keywords": [
-    "aigc",
-    "management",
-    "video",
-    "canvas",
-    "delivery"
-  ],
-  "author": "",
-  "license": "MIT"
+    "dev": "python -m http.server 8080 --bind 127.0.0.1"
+  }
 }

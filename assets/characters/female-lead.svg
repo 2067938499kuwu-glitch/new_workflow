@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-label="女主角角色形象">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fce9ee"/><stop offset="1" stop-color="#d8b5d0"/></linearGradient>
+    <linearGradient id="dress" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8c5d7c"/><stop offset="1" stop-color="#5b3856"/></linearGradient>
+  </defs>
+  <rect width="480" height="640" fill="url(#bg)"/>
+  <circle cx="84" cy="104" r="132" fill="#fff" opacity=".25"/>
+  <path d="M0 534c137-80 334-72 480-4v110H0z" fill="#ead2df"/>
+  <path d="M118 640c14-111 51-180 122-180s108 69 122 180z" fill="url(#dress)"/>
+  <path d="M202 421h76v78c-22 27-54 27-76 0z" fill="#e2aa91"/>
+  <path d="M137 331c-13-118 29-196 103-196 81 0 123 83 103 208l-28 121H160z" fill="#3d2a35"/>
+  <ellipse cx="240" cy="306" rx="89" ry="124" fill="#efbda3"/>
+  <path d="M152 270c14-85 54-127 99-127 60 0 93 48 96 120-44-12-79-39-103-78-23 40-52 69-92 85z" fill="#4a303e"/>
+  <ellipse cx="205" cy="316" rx="7" ry="10" fill="#3c3036"/><ellipse cx="278" cy="316" rx="7" ry="10" fill="#3c3036"/>
+  <path d="M217 373c14 11 32 11 47 0" fill="none" stroke="#b75f67" stroke-width="5" stroke-linecap="round"/>
+  <path d="M164 640c14-80 39-122 76-141 38 19 63 61 76 141z" fill="#f9edf3"/>
+  <path d="M207 497l33 42 33-42 25 143H182z" fill="#ead6e3"/>
+</svg>

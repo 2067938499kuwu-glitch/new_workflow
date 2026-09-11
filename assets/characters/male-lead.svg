@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-label="男主角角色形象">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dceeff"/><stop offset="1" stop-color="#8fb9de"/></linearGradient>
+    <linearGradient id="coat" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#304b65"/><stop offset="1" stop-color="#162c42"/></linearGradient>
+  </defs>
+  <rect width="480" height="640" fill="url(#bg)"/>
+  <circle cx="390" cy="92" r="128" fill="#fff" opacity=".2"/>
+  <path d="M0 535C112 456 330 439 480 520v120H0z" fill="#c3d9eb"/>
+  <path d="M126 640c7-105 40-183 114-183s107 78 114 183z" fill="url(#coat)"/>
+  <path d="M202 421h76v78c-24 28-52 28-76 0z" fill="#d8a181"/>
+  <ellipse cx="240" cy="305" rx="94" ry="126" fill="#e8b492"/>
+  <path d="M148 299c-4-99 39-158 103-158 77 0 113 66 85 170-17-45-38-82-73-109-26 34-68 58-115 68z" fill="#1d2a35"/>
+  <path d="M174 289c4-83 52-119 91-121-25 42-66 73-117 92z" fill="#263845" opacity=".8"/>
+  <ellipse cx="203" cy="318" rx="7" ry="10" fill="#2d3740"/><ellipse cx="278" cy="318" rx="7" ry="10" fill="#2d3740"/>
+  <path d="M218 375c15 9 30 9 44 0" fill="none" stroke="#a85f57" stroke-width="5" stroke-linecap="round"/>
+  <path d="M158 640c15-82 41-123 82-141 41 18 68 59 82 141z" fill="#f3f6f9"/>
+  <path d="M214 500l26 35 26-35 32 140H182z" fill="#dae4ec"/>
+</svg>

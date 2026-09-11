@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-label="核心配角角色形象">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8eee6"/><stop offset="1" stop-color="#a8bea6"/></linearGradient>
+    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#576b59"/><stop offset="1" stop-color="#314436"/></linearGradient>
+  </defs>
+  <rect width="480" height="640" fill="url(#bg)"/>
+  <circle cx="386" cy="102" r="120" fill="#fff" opacity=".22"/>
+  <path d="M0 540c126-72 340-73 480 0v100H0z" fill="#cad7c7"/>
+  <path d="M116 640c12-112 55-181 124-181s112 69 124 181z" fill="url(#robe)"/>
+  <path d="M201 419h78v79c-23 26-55 26-78 0z" fill="#c99575"/>
+  <ellipse cx="240" cy="305" rx="92" ry="125" fill="#d9a582"/>
+  <path d="M148 286c2-96 39-147 98-147 69 0 106 56 94 162-25-38-56-64-94-78-25 29-58 50-98 63z" fill="#44433f"/>
+  <path d="M149 278c14-88 49-130 99-139-22 39-53 69-93 92z" fill="#55534e"/>
+  <path d="M187 308h41m25 0h41m-66 0h25" fill="none" stroke="#33403a" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="207" cy="309" r="24" fill="none" stroke="#33403a" stroke-width="6"/><circle cx="274" cy="309" r="24" fill="none" stroke="#33403a" stroke-width="6"/>
+  <path d="M217 376c15 7 31 7 46 0" fill="none" stroke="#98594f" stroke-width="5" stroke-linecap="round"/>
+  <path d="M166 640c13-81 38-121 74-141 37 20 62 60 74 141z" fill="#e8eee7"/>
+  <path d="M210 498l30 39 30-39 28 142H182z" fill="#d2ddd1"/>
+</svg>
